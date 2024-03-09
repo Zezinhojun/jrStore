@@ -1,0 +1,30 @@
+<nav class="p-4 text-white bg-orange-500">
+  <div class="container flex items-center justify-between mx-auto">
+    <a routerLink="/" class="text-lg font-bold">JrStore</a>
+    <div class="flex items-center">
+      <a routerLink="/products" class="mr-6">Products</a>
+      <div class="relative" (mouseenter)="showCart.set(true)" (mouseleave)="showCart.set(false)">
+        <a routerLink="/checkout">
+          <svg fill="none" height="25" viewBox="0 0 15 15" width="25" xmlns="http://www.w3.org/2000/svg"></svg>
+          <span class="absolute right-0 px-1 text-lg font-bold text-white -top-1">{{cartStore.productsCount()}}</span>
+        </a>
+        @if (showCart() && cartStore.productsCount()) {
+        <div [ngClass]="{'show-cart-animation':showCart()}"
+          class="absolute right-0 z-30 w-48 p-2 mt-2 text-white rounded-sm bg-slate-400">
+          @for (product of cartStore.products(); track $index) {
+          <div class="flex items-center justify-between">
+            <span>{{product.qty}} {{product.title | slice: 0:10}} {{product.subTotal || product.price |
+              currency}}</span>
+          </div>
+          }
+          <hr class="my-4 border-gray-500 border-t-1">
+          <div class="flex justify-betwwen py-3 font-light">
+            Total:
+            <span class="not-italic font-bold">{{cartStore.totalAmount() | currency}}</span>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
