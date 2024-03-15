@@ -24,6 +24,7 @@ export const CartStore = signalStore(
   })),
 
   withMethods(({ products, ...store }, toastSvc = inject(ToastrService)) => ({
+
     addToCart(product: Product) {
       const isProductInCart = products().find((item: Product) => item.id === product.id)
       if (isProductInCart) {
@@ -35,6 +36,7 @@ export const CartStore = signalStore(
       }
       toastSvc.success('Product added successfully, JrStore')
     },
+
     removeFromCart(id: number) {
       const updateProducts = products().filter(product => product.id !== id)
       patchState(store, { products: updateProducts })

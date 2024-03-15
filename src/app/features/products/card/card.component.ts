@@ -37,6 +37,7 @@ export class CardComponent {
   product = input.required<Product>()
   @Output() addToCartEvent = new EventEmitter<Product>()
   onAddToCart(): void {
-    this.addToCartEvent.emit(this.product())
+    const productWithQty = { ...this.product(), qty: 1 };
+    this.addToCartEvent.emit(productWithQty)
   }
 }

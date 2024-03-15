@@ -57,7 +57,8 @@ export default class DetailsComponent implements OnInit {
     this.product = this._productsSvc.getProductsById(this.productId())
   }
   onAddToCart() {
-    this.cartStore.addToCart(this.product() as Product)
+    const productWithQty = { ...this.product(), qty: 1 };
+    this.cartStore.addToCart(productWithQty as Product)
   }
 
   generateSVG(index: number): SafeHtml {
