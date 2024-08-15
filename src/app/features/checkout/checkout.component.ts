@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { CartStore } from '@shared/store/shopping-cart.store';
 import { CheckoutService } from './services/checkout.service';
+import { IProduct } from '@shared/models/products.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -11,15 +12,21 @@ import { CheckoutService } from './services/checkout.service';
   styleUrl: './checkout.component.scss'
 })
 export default class CheckoutComponent {
-  cartStore = inject(CartStore)
-
   private readonly _checkoutSvc = inject(CheckoutService)
-  onProceedToPay(): void {
-    this._checkoutSvc.onProceedToPay()
+  public cartStore = inject(CartStore)
+
+  onProceedToPay(cartStore: IProduct[]): void {
+    this._checkoutSvc.onProceedToPay(cartStore)
   }
+
   removeItem(id: number): void {
     this.cartStore.removeFromCart(id)
   }
+
+  removeOneItem(id: number): void {
+    this.cartStore.removeOneItemFromCart(id)
+  }
+
   clearAll(): void {
     this.cartStore.clearCart()
   }

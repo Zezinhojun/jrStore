@@ -2,7 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit, Signal, inject, input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ProductsService } from '@api/products.service';
-import { Product } from '@shared/models/products.interface';
+import { IProduct } from '@shared/models/products.interface';
 import { CartStore } from '@shared/store/shopping-cart.store';
 
 @Component({
@@ -47,7 +47,7 @@ export default class DetailsComponent implements OnInit {
 
   // @Input({ alias: 'id' }) productId!: number
   productId = input<number>(0, { alias: 'id' })
-  product!: Signal<Product | undefined>
+  product!: Signal<IProduct | undefined>
   cartStore = inject(CartStore)
 
   private readonly _productsSvc = inject(ProductsService)
@@ -58,7 +58,7 @@ export default class DetailsComponent implements OnInit {
   }
   onAddToCart() {
     const productWithQty = { ...this.product(), qty: 1 };
-    this.cartStore.addToCart(productWithQty as Product)
+    this.cartStore.addToCart(productWithQty as IProduct)
   }
 
   generateSVG(index: number): SafeHtml {

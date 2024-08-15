@@ -1,15 +1,11 @@
 import { computed, inject } from "@angular/core";
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
-import { Product } from "@shared/models/products.interface";
+import { ICartStore } from "@shared/models/cartStore-interface";
+import { IProduct } from "@shared/models/products.interface";
+import { ToastMessage } from "@shared/utils/toast-message";
 import { ToastrService } from "ngx-toastr";
 
-export interface CartStore {
-  products: Product[]
-  totalAmount: number;
-  productsCount: number;
-}
-
-const initialState: CartStore = {
+const initialState: ICartStore = {
   products: [],
   totalAmount: 0,
   productsCount: 0
@@ -25,8 +21,8 @@ export const CartStore = signalStore(
 
   withMethods(({ products, ...store }, toastSvc = inject(ToastrService)) => ({
 
-    addToCart(product: Product) {
-      const isProductInCart = products().find((item: Product) => item.id === product.id)
+    addToCart(product: IProduct) {
+      const isProductInCart = products().find((item: IProduct) => item.id === product.id)
       if (isProductInCart) {
         isProductInCart.qty++
         isProductInCart.subTotal = isProductInCart.qty * isProductInCart.price
@@ -34,24 +30,44 @@ export const CartStore = signalStore(
       } else {
         patchState(store, { products: [...products(), product] })
       }
-      toastSvc.success('Product added successfully, JrStore')
+      toastSvc.success(ToastMessage.ADD_ITEM)
     },
 
-    removeFromCart(id: number) {
+    async removeFromCart(id: number) {
       const updateProducts = products().filter(product => product.id !== id)
       patchState(store, { products: updateProducts })
-      toastSvc.info('Product removed sucessfully, JrStore')
+      toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
+
+    async removeOneItemFromCart(id: number) {
+      const currentProducts = products();
+      const updatedProducts = currentProducts.map(product => {
+        if (product.id === id) {
+          const newQuantity = product.qty - 1;
+          return { ...product, qty: newQuantity };
+        }
+        return product;
+      })
+        .filter(product => product.qty > 0);
+      patchState(store, { products: updatedProducts });
+      if (currentProducts
+        .find(product => product.id === id && product.qty <= 0)) {
+         await this.removeFromCart(id);
+      }
+      products().length !== 0 ? toastSvc.info(ToastMessage.REMOVE_ONE)
+        : toastSvc.info(ToastMessage.REMOVE_ITEM)
+    },
+
     clearCart() {
       patchState(store, initialState)
-      toastSvc.info('Cart cleared, JrStore')
+      toastSvc.info(ToastMessage.CART_CLEAN)
     }
   }))
 )
 
-function calculateTotalAmount(products: Product[]): number {
+function calculateTotalAmount(products: IProduct[]): number {
   return products.reduce((acc, product) => acc + product.price * product.qty, 0)
 }
-function calculateProductCount(products: Product[]): number {
+function calculateProductCount(products: IProduct[]): number {
   return products.reduce((acc, product) => acc + product.qty, 0)
 }
