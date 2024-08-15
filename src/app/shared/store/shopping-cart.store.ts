@@ -42,6 +42,25 @@ export const CartStore = signalStore(
       patchState(store, { products: updateProducts })
       toastSvc.info('Product removed sucessfully, JrStore')
     },
+
+    removeOneItemFromCart(id: number) {
+      const currentProducts = products();
+      const updatedProducts = currentProducts.map(product => {
+        if (product.id === id) {
+          const newQuantity = product.qty - 1;
+          return { ...product, qty: newQuantity };
+        }
+        return product;
+      })
+        .filter(product => product.qty > 0);
+      patchState(store, { products: updatedProducts });
+      if (currentProducts
+        .find(product => product.id === id && product.qty <= 0)) {
+        this.removeFromCart(id);
+      }
+      toastSvc.info('One item removed successfully from JrStore');
+    },
+
     clearCart() {
       patchState(store, initialState)
       toastSvc.info('Cart cleared, JrStore')

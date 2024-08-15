@@ -17,9 +17,14 @@ export default class CheckoutComponent {
   onProceedToPay(): void {
     this._checkoutSvc.onProceedToPay()
   }
+  
   removeItem(id: number): void {
     this.cartStore.removeFromCart(id)
   }
+  removeOneItem(id: number): void {
+    this.cartStore.removeOneItemFromCart(id)
+  }
+  
   clearAll(): void {
     this.cartStore.clearCart()
   }
