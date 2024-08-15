@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
+import { IProduct } from "@shared/models/products.interface";
 
 @Injectable({ providedIn: 'root' })
 
 export class CheckoutService {
-  onProceedToPay(): any { }
+  onProceedToPay(cartStore:IProduct[]): any {
+   }
 }

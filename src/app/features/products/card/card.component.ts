@@ -1,7 +1,7 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Output, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Product } from '@shared/models/products.interface';
+import { IProduct } from '@shared/models/products.interface';
 
 @Component({
   selector: 'app-card',
@@ -34,8 +34,8 @@ import { Product } from '@shared/models/products.interface';
 `
 })
 export class CardComponent {
-  product = input.required<Product>()
-  @Output() addToCartEvent = new EventEmitter<Product>()
+  product = input.required<IProduct>()
+  @Output() addToCartEvent = new EventEmitter<IProduct>()
   onAddToCart(): void {
     const productWithQty = { ...this.product(), qty: 1 };
     this.addToCartEvent.emit(productWithQty)
