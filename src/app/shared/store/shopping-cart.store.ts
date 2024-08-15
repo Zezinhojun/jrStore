@@ -1,7 +1,7 @@
 import { computed, inject } from "@angular/core";
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { ICartStore } from "@shared/models/cartStore-interface";
-import { IProduct } from "@shared/models/products.interface";
+import { IProduct } from "@shared/models/products-interface";
 import { ToastMessage } from "@shared/utils/toast-message";
 import { ToastrService } from "ngx-toastr";
 

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CardComponent } from "./card/card.component";
 import { ProductsService } from '@api/products.service';
-import { IProduct } from '@shared/models/products.interface';
+import { IProduct } from '@shared/models/products-interface';
 import { CartStore } from '@shared/store/shopping-cart.store';
 
 @Component({

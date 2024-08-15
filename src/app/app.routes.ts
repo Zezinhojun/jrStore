@@ -9,6 +9,10 @@ export const routes: Routes = [
     path: 'checkout',
     loadComponent: () => import('./features/checkout/checkout.component')
   },
+  {
+    path: 'orders',
+    loadComponent: () => import('./features/orders/orders.component')
+  },
   { path: "", redirectTo: 'products', pathMatch: 'full' },
   { path: "**", redirectTo: 'products', pathMatch: 'full' },
 ];

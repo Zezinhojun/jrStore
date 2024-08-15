@@ -1,7 +1,7 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Output, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { IProduct } from '@shared/models/products.interface';
+import { IProduct } from '@shared/models/products-interface';
 
 @Component({
   selector: 'app-card',
@@ -23,7 +23,7 @@ import { IProduct } from '@shared/models/products.interface';
         >{{product().title | slice:0:30}}</a>
       </h2>
       <div class="flex items-center justify-between mt-1">
-        <p class="text-2xl font-bold text-orange-500">{{product().price | currency}}</p>
+        <p class="text-2xl font-bold text-orange-500">{{product().price | currency:'BRL':'symbol'}}</p>
         <button (click)="onAddToCart()"
         class="px-2 py-1 text-white bg-orange-500 rounded hover:bg-orange-700">
           Add to cart

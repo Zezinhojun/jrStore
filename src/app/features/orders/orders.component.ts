@@ -1,26 +1,25 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { CartStore } from '@shared/store/shopping-cart.store';
-import { CheckoutService } from './services/checkout.service';
 import { IProduct } from '@shared/models/products-interface';
+import { OrdersService } from './services/orders.service';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
   imports: [CurrencyPipe],
-  templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.scss'
+  templateUrl: './orders.component.html',
+  styleUrl: './orders.component.scss'
 })
-export default class CheckoutComponent {
-  private readonly _checkoutSvc = inject(CheckoutService)
+export default class OrdersComponent {
+  private readonly _ordersSvc = inject(OrdersService)
   public cartStore = inject(CartStore)
 
-  onContinue(){
-    this._checkoutSvc.onContinue()
-  }
-
   onProceedToPay(cartStore: IProduct[]): void {
-    this._checkoutSvc.onProceedToPay(cartStore)
+    this._ordersSvc.onProceedToPay(cartStore)
+  }
+  onContinue(): void {
+    this._ordersSvc.onContinueShopping()
   }
 
   removeItem(id: number): void {
