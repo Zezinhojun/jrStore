@@ -58,9 +58,9 @@ export const CartStore = signalStore(
         : toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
 
-    clearCart() {
+    clearCart(finished: boolean) {
       patchState(store, initialState)
-      toastSvc.info(ToastMessage.CART_CLEAN)
+    if(finished)toastSvc.info(ToastMessage.CART_CLEAN)
     }
   }))
 )

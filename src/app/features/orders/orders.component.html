@@ -5,11 +5,27 @@
     </div>
     @if(orderStore.ordersCount()) {
     <div class="w-full mx-auto overflow-auto lg:w-2/3">
-      <div class="flex justify-end p-2 mb-4">
-        <button (click)="clearAll()"
-          class="flex px-8 py-2 text-lg text-white bg-red-500 border-0 rounded focus:outline-none hover:bg-red-600">Clear
-          all</button>
+
+      <div class="flex justify-between">
+       
+        <div class="flex gap-6 py-4">
+          <button (click)="applyFilter('pending')">
+            <img src="../../../assets/svgs/pending.svg" alt="Filter Pending" class="w-6 h-6 hover:opacity-80" />
+          </button>
+          <button (click)="applyFilter('closed')">
+            <img src="../../../assets/svgs/closed.svg" alt="Filter closed" class="w-6 h-6 hover:opacity-80" />
+          </button>
+          <button (click)="clearFilter()">
+            <img src="../../../assets/svgs/clean-filter.svg" alt="Filter closed" class="w-6 h-6 hover:opacity-80" />
+          </button>
+        </div>
+        <div class="flex p-2">
+          <button (click)="clearOrders()"
+            class="flex px-8 py-2 text-lg text-white bg-red-500 border-0 rounded focus:outline-none hover:bg-red-600">Clear
+            all</button>
+        </div>
       </div>
+
       <table class="w-full text-left whitespace-no-wrap table-auto">
         <thead>
           <tr>
@@ -23,27 +39,44 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of orderStore.orders(); track $index) {
+          @for (item of orderStore.filteredOrders(); track $index) {
           <tr>
             <td class="flex items-center ml-8 px-4 py-3">{{item.id}}</td>
             <td class="px-4 py-3 text-lg text-gray-900">{{item.totalAmount|
               currency:'BRL':'symbol'}}</td>
+
             @if(item.state === "closed"){
-            <td class=" ml-8  px-4 py-3">✔</td>
-            }@else if(item.state === "pending") {
-            <td class=" ml-8  px-4 py-3">❌</td>
+            <td class="ml-8 px-4 py-3">
+              <img src="../../../assets/svgs/closed.svg" alt="Filter closed" class=" w-6 h-6 hover:opacity-80" />
+
+            </td>
+            }@else {
+            <td class="ml-8 px-4 py-3">
+              <img src="../../../assets/svgs/pending.svg" alt="Filter closed" class=" h-6 hover:opacity-80" />
+
+            </td>
             }
             <td class="flex items-center h-full pt-4">
               @if(item.state === "closed"){
-                <button (click)="removeItem(item.id)"
-                  class="flex justify-center ml-7 px-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600">
-                  X
-                </button>
+              <button (click)="removeOneOrder(item.id)"
+                class="flex justify-center ml-7 px-2 text-white border-0 rounded focus:outline-none hover:bg-red-200">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red"
+                  class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+
+              </button>
               }@else if(item.state === "pending") {
-                <button (click)="removeItem(item.id)"
-                  class="flex justify-center ml-7 px-2 text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-green-600">
-                  V
-                </button>
+              <button (click)="onCloseOrder()"
+                class="flex justify-center ml-7 px-2 text-white  border-0 rounded focus:outline-none hover:bg-green-200">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="green" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+
+              </button>
               }
             </td>
           </tr>

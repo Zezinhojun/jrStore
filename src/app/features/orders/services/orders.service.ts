@@ -1,47 +1,60 @@
-import { inject, Injectable, signal } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { IOrder } from "@shared/models/orders-interface";
 import { OrderStore } from "@shared/store/order.store";
 import { CartStore } from "@shared/store/shopping-cart.store";
+import { Status } from "@shared/utils/order-status";
 
 @Injectable({ providedIn: 'root' })
+
 export class OrdersService {
-  public orders = signal<IOrder | null>(null);
-  router = inject(Router)
-  cartStore = inject(CartStore)
-  orderStore = inject(OrderStore)
+  private readonly router = inject(Router)
+  private readonly cartStore = inject(CartStore)
+  private readonly orderStore = inject(OrderStore)
+  private readonly products = this.cartStore.products
 
-
-  onSaveHowPending(){
-    console.log(this.cartStore.products());
-    try {
-      if (this.cartStore.products().length > 0) {
-        this.orderStore.addOrder(this.cartStore.products(), "pending")
-      }
-      this.cartStore.clearCart()
-      console.log(this.orderStore.orders());
-      
-    } catch (error) {
-      console.log(error);
-
-    }
+  clearFilter() {
+    this.orderStore.clearFilter();
   }
 
-  onProceedToPayService(): any {
-    console.log(this.cartStore.products());
-    try {
-      if (this.cartStore.products().length > 0) {
-        this.orderStore.addOrder(this.cartStore.products(), "closed")
-      }
-
-      console.log(this.orderStore.orders());
-      
-    } catch (error) {
-      console.log(error);
-
-    }
+  clearOrders() {
+    this.orderStore.removeAllOrders()
   }
+
+  filterOrderByState(state: string) {
+    this.orderStore.filterOrderByState(state)
+  }
+
   onContinueShopping(): any {
     this.router.navigate(["/"])
   }
+
+  onCloseOrder(): any {
+    try {
+      if (this.products().length > 0) {
+        this.orderStore.addOrder(this.cartStore.products(), Status.CLOSED)
+        this.cartStore.clearCart(false)
+        this.router.navigate(["/orders"])
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  onSaveHowPending() {
+    try {
+      if (this.products().length > 0) {
+        this.orderStore.addOrder(this.products(), Status.PENDING)
+        this.cartStore.clearCart(false)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  removeOneOrder(id: string) {
+    this.orderStore.removeOneOrderFromOrders(id)
+  }
+
+
+
 }

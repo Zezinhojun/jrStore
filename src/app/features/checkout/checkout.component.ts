@@ -1,8 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { CartStore } from '@shared/store/shopping-cart.store';
 import { CheckoutService } from './services/checkout.service';
-import { IProduct } from '@shared/models/products-interface';
+import { CartStore } from '@shared/store/shopping-cart.store';
 
 @Component({
   selector: 'app-checkout',
@@ -15,27 +14,28 @@ export default class CheckoutComponent {
   private readonly _checkoutSvc = inject(CheckoutService)
   public cartStore = inject(CartStore)
 
-  onContinue(){
-    this._checkoutSvc.onContinue()
+  onClearAllFromCart(): void {
+    this._checkoutSvc.onClearAllFromCart()
   }
 
-  onSaveOrderAsPending(){
-    this._checkoutSvc.onSaveHowPending()
+  onContinue() {
+    this._checkoutSvc.onContinue()
   }
 
   onCloseOrder(): void {
     this._checkoutSvc.onProceedToPayService()
   }
 
+  onSaveOrderAsPending() {
+    this._checkoutSvc.onSaveHowPending()
+  }
+
   removeItem(id: number): void {
-    this.cartStore.removeFromCart(id)
+    this._checkoutSvc.removeItem(id)
   }
 
   removeOneItem(id: number): void {
-    this.cartStore.removeOneItemFromCart(id)
+    this._checkoutSvc.removeOneItemFromCart(id)
   }
 
-  clearAll(): void {
-    this.cartStore.clearCart()
-  }
 }
