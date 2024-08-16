@@ -1,5 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { IOrder } from "@shared/models/orders-interface";
+import { IProduct } from "@shared/models/products-interface";
 import { CartStore } from "@shared/store/shopping-cart.store";
 import { OrdersService } from "app/features/orders/services/orders.service";
 
@@ -10,10 +12,20 @@ export class CheckoutService {
   private readonly cartStore = inject(CartStore)
   private readonly _orderSvc = inject(OrdersService)
 
-  onClearAllFromCart(){
+  loadCart(id: string) {
+    const order = this._orderSvc.getOrderById(id)
+    if (order) {
+      this.cartStore.clearCart(false)
+      order.items.forEach((item: IProduct) => {
+        this.cartStore.addToCart(item)
+      })
+    }
+  }
+
+  onClearAllFromCart() {
     this.cartStore.clearCart(true)
   }
-  onSaveHowPending(){
+  onSaveHowPending() {
     this._orderSvc.onSaveHowPending()
     this.router.navigate(["/"])
 
@@ -25,7 +37,7 @@ export class CheckoutService {
     this._orderSvc.onCloseOrder()
   }
 
-  removeItem(id: number){
+  removeItem(id: number) {
     this.cartStore.removeFromCart(id)
   }
   removeOneItemFromCart(id: number): void {

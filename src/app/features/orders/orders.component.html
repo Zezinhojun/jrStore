@@ -68,7 +68,7 @@
 
               </button>
               }@else if(item.state === "pending") {
-              <button (click)="onCloseOrder()"
+              <button (click)="onGoToCheckout(item.id)"
                 class="flex justify-center ml-7 px-2 text-white  border-0 rounded focus:outline-none hover:bg-green-200">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="green" class="size-6">

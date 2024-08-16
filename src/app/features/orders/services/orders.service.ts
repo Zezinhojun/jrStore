@@ -20,6 +20,10 @@ export class OrdersService {
     this.orderStore.removeAllOrders()
   }
 
+  getOrderById(id: string) {
+    return this.orderStore.getOrderById(id)
+  }
+
   filterOrderByState(state: string) {
     this.orderStore.filterOrderByState(state)
   }
@@ -34,10 +38,24 @@ export class OrdersService {
         this.orderStore.addOrder(this.cartStore.products(), Status.CLOSED)
         this.cartStore.clearCart(false)
         this.router.navigate(["/orders"])
+        console.log(this.orderStore.orders())
       }
     } catch (error) {
       console.error(error);
     }
+  }
+
+  onGoToCheckout(id: string) {
+    const order = this.orderStore.getOrderById(id);
+    if (order) {
+      this.router.navigate(['/checkout'], { state: { order } });
+    } else {
+      console.error('Order not found');
+    }
+  }
+
+  goToCheckoutWithOrder(orderId: string) {
+
   }
 
   onSaveHowPending() {

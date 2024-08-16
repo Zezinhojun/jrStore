@@ -39,4 +39,8 @@ export default class OrdersComponent {
   removeOneOrder(id:string){
     this._ordersSvc.removeOneOrder(id)
   }
+
+  onGoToCheckout(id: string){
+    this._ordersSvc.onGoToCheckout(id)
+  }
 }

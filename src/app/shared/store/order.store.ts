@@ -60,7 +60,12 @@ export const OrderStore = signalStore(
             const updatedOrders = currentOrders.filter(order => order.id !== id);
             patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
             _toastSvc.info(ToastMessage.REMOVE_ORDER);
-          }
+          },
+          
+        getOrderById(id: string){
+            const currentOrder = orders()
+            return currentOrder.find(order => order.id === id)
+        }
     }))
 
 );
