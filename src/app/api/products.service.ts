@@ -28,7 +28,7 @@ export class ProductsService {
   public getProductsById(id: number) {
     return runInInjectionContext(this._injector, () =>
       toSignal<IProduct>(this._http.get<IProduct>
-        (`${this._endPoint}/${id}`)))
+        (`${this._endPoint}${id}`)))
 
     // const product$ = this._http.get<Product>(`${this._endPoint}/products/${id}`)
     // return toSignal(product$)
