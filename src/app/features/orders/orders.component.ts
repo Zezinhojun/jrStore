@@ -1,7 +1,8 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { OrdersService } from './services/orders.service';
+
 import { OrderStore } from '@shared/store/order.store';
+import { OrdersService } from './services/orders.service';
 
 @Component({
   selector: 'app-checkout',

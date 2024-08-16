@@ -17,7 +17,7 @@ export class ProductsService {
   }
 
   public getProducts(): void {
-    this._http.get<IProduct[]>(`${this._endPoint}?sort=desc`)
+    this._http.get<IProduct[]>(`${this._endPoint}/products/?sort=desc`)
       .pipe(
         map((products: IProduct[]) => products.map((product: IProduct) => ({ ...product, qty: 1 }))
         ),
@@ -28,7 +28,7 @@ export class ProductsService {
   public getProductsById(id: number) {
     return runInInjectionContext(this._injector, () =>
       toSignal<IProduct>(this._http.get<IProduct>
-        (`${this._endPoint}${id}`)))
+        (`${this._endPoint}/${id}`)))
 
     // const product$ = this._http.get<Product>(`${this._endPoint}/products/${id}`)
     // return toSignal(product$)
