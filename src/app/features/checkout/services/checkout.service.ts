@@ -9,11 +9,16 @@ export class CheckoutService {
   router = inject(Router)
   private readonly _orderSvc = inject(OrdersService)
   orders = this._orderSvc.orders
-  
+
+  onSaveHowPending(){
+    this._orderSvc.onSaveHowPending()
+    this.router.navigate(["/"])
+
+  }
   onContinue() {
     this.router.navigate(["/"])
   }
-  onProceedToPay(cartStore: IProduct[]): any {
-
+  onProceedToPayService(): any {
+    this._orderSvc.onProceedToPayService()
   }
 }

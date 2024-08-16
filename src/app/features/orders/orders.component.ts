@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { CartStore } from '@shared/store/shopping-cart.store';
 import { IProduct } from '@shared/models/products-interface';
 import { OrdersService } from './services/orders.service';
+import { OrderStore } from '@shared/store/order.store';
 
 @Component({
   selector: 'app-checkout',
@@ -14,16 +15,20 @@ import { OrdersService } from './services/orders.service';
 export default class OrdersComponent {
   private readonly _ordersSvc = inject(OrdersService)
   public cartStore = inject(CartStore)
+  orderStore = inject(OrderStore)
+  
 
-  onProceedToPay(cartStore: IProduct[]): void {
-    this._ordersSvc.onProceedToPay(cartStore)
+  constructor(){
+    console.log(this.orderStore.orders())
+  }
+  onProceedToPay(): void {
+    this._ordersSvc.onProceedToPayService()
   }
   onContinue(): void {
     this._ordersSvc.onContinueShopping()
   }
 
-  removeItem(id: number): void {
-    this.cartStore.removeFromCart(id)
+  removeItem(id: string): void {
   }
 
   removeOneItem(id: number): void {

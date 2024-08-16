@@ -19,8 +19,12 @@ export default class CheckoutComponent {
     this._checkoutSvc.onContinue()
   }
 
-  onProceedToPay(cartStore: IProduct[]): void {
-    this._checkoutSvc.onProceedToPay(cartStore)
+  onSaveOrderAsPending(){
+    this._checkoutSvc.onSaveHowPending()
+  }
+
+  onCloseOrder(): void {
+    this._checkoutSvc.onProceedToPayService()
   }
 
   removeItem(id: number): void {

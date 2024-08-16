@@ -61,13 +61,13 @@
       </table>
     </div>
     <div class=" flex gap-8 justify-center w-full pl-4 mx-auto mt-4 lg:w-2/3">
-      <button (click)="onProceedToPay(cartStore.products())"
+      <button (click)="onSaveOrderAsPending()"
         class="flex px-6 py-2 text-white bg-blue-500 border-0 rounded focus:outline-none hover:bg-blue-600">Save as
         Pending</button>
       <button (click)="onContinue()"
         class="flex px-6 py-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-orange-600">Continue
         shopping</button>
-      <button (click)="onProceedToPay(cartStore.products())"
+      <button (click)="onCloseOrder()"
         class="flex px-6 py-2 text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-green-600">Pay</button>
     </div>
     } @else {

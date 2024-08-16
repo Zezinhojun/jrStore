@@ -3,7 +3,7 @@
     <div class="flex flex-col w-full mb-20 text-center">
       <h1 class="mb-2 text-3xl font-medium text-gray-900 sm:text-4xl title-font">Orders page</h1>
     </div>
-    @if(cartStore.productsCount()) {
+    @if(orderStore.ordersCount()) {
     <div class="w-full mx-auto overflow-auto lg:w-2/3">
       <div class="flex justify-end p-2 mb-4">
         <button (click)="clearAll()"
@@ -23,23 +23,23 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of cartStore.products(); track $index) {
+          @for (item of orderStore.orders(); track $index) {
           <tr>
-            <td class="flex items-center ml-8 px-4 py-3">{{item.qty}}</td>
-            <td class="px-4 py-3 text-lg text-gray-900">{{cartStore.totalAmount() |
+            <td class="flex items-center ml-8 px-4 py-3">{{item.id}}</td>
+            <td class="px-4 py-3 text-lg text-gray-900">{{item.totalAmount|
               currency:'BRL':'symbol'}}</td>
-            @if(false){
+            @if(item.state === "closed"){
             <td class=" ml-8  px-4 py-3">✔</td>
-            }@else {
+            }@else if(item.state === "pending") {
             <td class=" ml-8  px-4 py-3">❌</td>
             }
             <td class="flex items-center h-full pt-4">
-              @if(!true){
+              @if(item.state === "closed"){
                 <button (click)="removeItem(item.id)"
                   class="flex justify-center ml-7 px-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600">
                   X
                 </button>
-              }@else {
+              }@else if(item.state === "pending") {
                 <button (click)="removeItem(item.id)"
                   class="flex justify-center ml-7 px-2 text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-green-600">
                   V
