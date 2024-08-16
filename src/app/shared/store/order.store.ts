@@ -1,4 +1,4 @@
-import { computed, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { IOrder } from '@shared/models/orders-interface';
 import { IOrderStore } from '@shared/models/orderStore-interface';
@@ -26,28 +26,56 @@ export const OrderStore = signalStore(
 
     withMethods(({ orders, ...store }, _toastSvc = inject(ToastrService)) => ({
 
-        addOrder: async (items: IProduct[], state: string) => {
-            const id = uuidv4()
+      updateOrder(order: IOrder, items: IProduct[], state?: string) {
+        const status = state ?? Status.PENDING
+        const existingOrder = orders().find(o => o.id === order.id);
+
+        if (existingOrder) {
+              existingOrder.items = items;
+              existingOrder.state = status;
+              existingOrder.totalAmount = calculateTotalAmountForOrder(existingOrder);
+              existingOrder.ordersCount = calculateOrderCountForOrder(existingOrder);
+
+              if(existingOrder.ordersCount <= 0){
+                this.removeOneOrderFromOrders(order.id)
+                console.log("Removido com sucesso")
+                _toastSvc.info(ToastMessage.REMOVE_ORDER);
+              } else{
+                console.log("Não removeu nada")
+                const updatedOrders = orders().map(o => o.id === order.id ? existingOrder : o);
+                patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
+              }
+      }
+    },
+
+
+        addOrder : async function (items: IProduct[], state: string, id?:string) {
+            const orderid = id ?? uuidv4()
             const newOrder: IOrder = {
-                id,
+                id: orderid,
                 state,
                 items,
-                totalAmount: calculateTotalAmountForOrder({ id, state, items, totalAmount: 0, ordersCount: 0 }),
-                ordersCount: calculateOrderCountForOrder({ id, state, items, totalAmount: 0, ordersCount: 0 })
+                totalAmount: calculateTotalAmountForOrder({ id: orderid, state, items, totalAmount: 0, ordersCount: 0 }),
+                ordersCount: calculateOrderCountForOrder({ id: orderid, state, items, totalAmount: 0, ordersCount: 0 })
             }
-            const updatedOrders = [...orders(), newOrder];
-            patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
-            _toastSvc.success(ToastMessage.ADD_ORDER)
+
+              const updatedOrders = [...orders(), newOrder];
+              patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
+              _toastSvc.success(ToastMessage.ADD_ORDER)
+
 
         },
         filterOrderByState: async (state:string) => {
-            state === Status.PENDING ? state = Status.PENDING : state = Status.CLOSED
-            const filtered = orders().filter(order => order.state === state);
+          if (state === Status.PENDING) {
+            state = Status.PENDING;
+        } else {
+            state = Status.CLOSED;
+        }            const filtered = orders().filter(order => order.state === state);
             patchState(store, { filteredOrders: filtered } as Partial<IOrderStore>)
         },
 
         clearFilter: async () => {
-            patchState(store, { filteredOrders: orders() } as Partial<IOrderStore>); 
+            patchState(store, { filteredOrders: orders() } as Partial<IOrderStore>);
         },
         removeAllOrders() {
             patchState(store, { orders: [], filteredOrders: [] } as Partial<IOrderStore>);
@@ -61,14 +89,14 @@ export const OrderStore = signalStore(
             patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
             _toastSvc.info(ToastMessage.REMOVE_ORDER);
           },
-          
+
         getOrderById(id: string){
             const currentOrder = orders()
             return currentOrder.find(order => order.id === id)
         }
-    }))
-
+    })),
 );
+
 
 const calculateTotalAmountForOrder = (order: IOrder): number => {
     return parseFloat(order.items.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2));

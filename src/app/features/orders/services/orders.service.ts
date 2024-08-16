@@ -1,5 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { IOrder } from "@shared/models/orders-interface";
 import { OrderStore } from "@shared/store/order.store";
 import { CartStore } from "@shared/store/shopping-cart.store";
 import { Status } from "@shared/utils/order-status";
@@ -48,14 +49,10 @@ export class OrdersService {
   onGoToCheckout(id: string) {
     const order = this.orderStore.getOrderById(id);
     if (order) {
-      this.router.navigate(['/checkout'], { state: { order } });
+      this.router.navigate(['/checkout', id]);
     } else {
       console.error('Order not found');
     }
-  }
-
-  goToCheckoutWithOrder(orderId: string) {
-
   }
 
   onSaveHowPending() {
@@ -73,6 +70,11 @@ export class OrdersService {
     this.orderStore.removeOneOrderFromOrders(id)
   }
 
-
-
+  updateOrder(order: IOrder, state?: string): void {
+      if(this.products().length > 0){
+        this.orderStore.updateOrder(order, this.products(), state)
+        this.cartStore.clearCart(false)
+        this.router.navigate(['/orders'])
+      }
+    }
 }

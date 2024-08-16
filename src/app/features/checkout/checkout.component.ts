@@ -1,9 +1,11 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { CheckoutService } from './services/checkout.service';
-import { CartStore } from '@shared/store/shopping-cart.store';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IOrder } from '@shared/models/orders-interface';
+import { CartStore } from '@shared/store/shopping-cart.store';
+import { Status } from '@shared/utils/order-status';
+
+import { CheckoutService } from './services/checkout.service';
 
 @Component({
   selector: 'app-checkout',
@@ -14,20 +16,12 @@ import { IOrder } from '@shared/models/orders-interface';
 })
 export default class CheckoutComponent implements OnInit {
   private readonly _checkoutSvc = inject(CheckoutService)
+  private readonly route = inject(ActivatedRoute)
   public cartStore = inject(CartStore)
-  private readonly router = inject(Router)
-  order: any
+  private order: IOrder | null = null
 
   ngOnInit() {
-    const navigation = this.router.getCurrentNavigation();
-    console.log('Current navigation:', navigation); // Log to check the navigation state
-    if (navigation?.extras?.state?.['order']) {
-      this.order = navigation.extras.state['order'];
-      console.log('Order found:', this.order); // Log to check the order
-      this._checkoutSvc.loadCart(this.order);
-    } else {
-      console.error('No order found in navigation state.');
-    }
+    this.order = this.route.snapshot.data['order'];
   }
 
   onClearAllFromCart(): void {
@@ -39,11 +33,20 @@ export default class CheckoutComponent implements OnInit {
   }
 
   onCloseOrder(): void {
-    this._checkoutSvc.onProceedToPayService()
+    if(this.order){
+      const state = Status.CLOSED
+      this._checkoutSvc.updateOrder(this.order, state)
+    } else{
+      this._checkoutSvc.onProceedToPayService()
+    }
   }
 
   onSaveOrderAsPending() {
-    this._checkoutSvc.onSaveHowPending()
+    if(this.order){
+      this._checkoutSvc.updateOrder(this.order)
+    } else{
+      this._checkoutSvc.onSaveHowPending()
+    }
   }
 
   removeItem(id: number): void {
@@ -53,5 +56,6 @@ export default class CheckoutComponent implements OnInit {
   removeOneItem(id: number): void {
     this._checkoutSvc.removeOneItemFromCart(id)
   }
+
 
 }
