@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext, signal } from "@angular/core";
 import { environment } from "@envs/environment";
-import { IProduct } from "@shared/models/products.interface";
+import { IProduct } from "@shared/models/products-interface";
 import { map, tap } from "rxjs";
 import { toSignal } from '@angular/core/rxjs-interop'
 

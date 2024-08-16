@@ -5,9 +5,9 @@
     </div>
     @if(cartStore.productsCount()) {
     <div class="w-full mx-auto overflow-auto lg:w-2/3">
-      <div class="flex justify-end p-2">
-        <button (click)="clearAll()"
-          class="flex px-8 py-2 text-lg text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600">Clear
+      <div class="flex justify-end p-2 mb-4">
+        <button (click)="onClearAllFromCart()"
+          class="flex px-8 py-2 text-lg text-white bg-red-500 border-0 rounded focus:outline-none hover:bg-red-600">Clear
           all</button>
       </div>
       <table class="w-full text-left whitespace-no-wrap table-auto">
@@ -16,32 +16,30 @@
             <th
               class="px-4 py-3 text-sm font-medium tracking-wider text-gray-900 bg-gray-100 rounded-tl rounded-bl title-font">
               Name</th>
-            <th class="px-4 py-3 text-sm font-medium tracking-wider text-gray-900 bg-gray-100 title-font">Qty</th>
+            <th
+              class="flex justify-center px-4 py-3 text-sm font-medium tracking-wider text-gray-900 bg-gray-100 title-font">
+              Qty</th>
             <th class="px-4 py-3 text-sm font-medium tracking-wider text-gray-900 bg-gray-100 title-font">Price</th>
-            <th class="px-4 py-3 text-sm font-medium tracking-wider text-gray-900 bg-gray-100 title-font"></th>
+            <th class="px-4 py-3 ml-auto text-sm font-medium tracking-wider text-gray-900 bg-gray-100 title-font">
+              Actions</th>
           </tr>
         </thead>
         <tbody>
           @for (item of cartStore.products(); track $index) {
           <tr>
             <td class="px-4 py-3">{{item.title}}</td>
-            <td class="px-4 py-3">{{item.qty}}</td>
-            <td class="px-4 py-3 text-lg text-gray-900">{{item.price | currency}}</td>
-            <td>
+            <td class="flex justify-center py-3">{{item.qty}}</td>
+            <td class="px-4 py-3 text-lg text-gray-900">{{ item.price | currency:'BRL':'symbol' }}</td>
+            <td class="flex gap-9 items-center h-full pt-4">
               <button (click)="removeOneItem(item.id)"
-                class="flex px-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600">
-                -
+                class="flex px-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600"> -
               </button>
-            </td>
-            <td>
               <button (click)="removeItem(item.id)"
-                class="flex px-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600">
-                X
+                class="flex px-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-red-600"> X
               </button>
             </td>
           </tr>
           }
-
         </tbody>
         <tfoot>
           <tr>
@@ -50,17 +48,27 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2">Total:</td>
+            <td colspan="2">
+              <span class="ml-4">
+                Total:
+              </span>
+            </td>
             <td class="px-4 py-3 text-lg not-italic font-bold text-gray-900">{{cartStore.totalAmount() |
-              currency}}
+              currency:'BRL':'symbol'}}
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
-    <div class="flex w-full pl-4 mx-auto mt-4 lg:w-2/3">
-      <button (click)="onProceedToPay(cartStore.products())"
-        class="flex px-6 py-2 ml-auto text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-orange-600">Pay</button>
+    <div class=" flex gap-8 justify-center w-full pl-4 mx-auto mt-4 lg:w-2/3">
+      <button (click)="onSaveOrderAsPending()"
+        class="flex px-6 py-2 text-white bg-blue-500 border-0 rounded focus:outline-none hover:bg-blue-600">Save as
+        Pending</button>
+      <button (click)="onContinue()"
+        class="flex px-6 py-2 text-white bg-orange-500 border-0 rounded focus:outline-none hover:bg-orange-600">Continue
+        shopping</button>
+      <button (click)="onCloseOrder()"
+        class="flex px-6 py-2 text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-green-600">Pay</button>
     </div>
     } @else {
     <div class="flex flex-col w-full mb-20 text-center">

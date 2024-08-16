@@ -1,7 +1,7 @@
 import { computed, inject } from "@angular/core";
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { ICartStore } from "@shared/models/cartStore-interface";
-import { IProduct } from "@shared/models/products.interface";
+import { IProduct } from "@shared/models/products-interface";
 import { ToastMessage } from "@shared/utils/toast-message";
 import { ToastrService } from "ngx-toastr";
 
@@ -20,7 +20,9 @@ export const CartStore = signalStore(
   })),
 
   withMethods(({ products, ...store }, toastSvc = inject(ToastrService)) => ({
-
+    setCart(id: string, data: ICartStore) {
+      patchState(store, { [id]: data })
+    },
     addToCart(product: IProduct) {
       const isProductInCart = products().find((item: IProduct) => item.id === product.id)
       if (isProductInCart) {
@@ -52,15 +54,15 @@ export const CartStore = signalStore(
       patchState(store, { products: updatedProducts });
       if (currentProducts
         .find(product => product.id === id && product.qty <= 0)) {
-         await this.removeFromCart(id);
+        await this.removeFromCart(id);
       }
       products().length !== 0 ? toastSvc.info(ToastMessage.REMOVE_ONE)
         : toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
 
-    clearCart() {
+   async  clearCart(finished: boolean) {
       patchState(store, initialState)
-      toastSvc.info(ToastMessage.CART_CLEAN)
+      if (finished) toastSvc.info(ToastMessage.CART_CLEAN)
     }
   }))
 )

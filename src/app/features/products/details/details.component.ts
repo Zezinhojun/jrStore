@@ -1,14 +1,14 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { Component, OnInit, Signal, inject, input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ProductsService } from '@api/products.service';
-import { IProduct } from '@shared/models/products.interface';
+import { IProduct } from '@shared/models/products-interface';
 import { CartStore } from '@shared/store/shopping-cart.store';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, SlicePipe],
   template: `
     <section class="overflow-hidden text-gray-600 body-font">
       <div class="container px-5 py-24 mx-auto">
@@ -28,9 +28,9 @@ import { CartStore } from '@shared/store/shopping-cart.store';
                 <span class="ml-3 text-gray-600">{{product()?.rating?.count}} reviews</span>
               </span>
             </div>
-            <p class="mt-6 mb-5 leading-relaxed">{{product()?.description}}</p>
+            <p class="mt-6 mb-5 leading-relaxed">{{product()?.description | slice:0:50 }}</p>
             <div class="flex">
-              <span class="text-2xl font-bold text-orange-500">{{product()?.price | currency}}</span>
+              <span class="text-2xl font-bold text-orange-500">{{product()?.price | currency:'BRL':'symbol'}}</span>
               <button (click)="onAddToCart()"
                       class=" ml-auto px-2 py-1 text-white bg-orange-500 rounded hover:bg-orange-700">
           Add to cart
