@@ -16,6 +16,7 @@ export class CheckoutService {
 
   constructor() {
     this.order = this.route.snapshot.data['order'];
+    console.log(this.order)
     this.checkAndRemoveOrder();
   }
 
@@ -35,18 +36,19 @@ export class CheckoutService {
 
    onClearAllFromCart () {
      this.cartStore.clearCart(true)
-     this.checkAndRemoveOrder();
   }
 
    onSaveHowPending() {
-     this._orderSvc.onSaveHowPending()
+    this._orderSvc.onSaveHowPending()
     this.router.navigate(["/"])
     this.checkAndRemoveOrder();
 
   }
+
   onContinue() {
     this.router.navigate(["/"])
   }
+
   onProceedToPayService(): any {
     this._orderSvc.onCloseOrder()
     this.checkAndRemoveOrder();
@@ -60,10 +62,23 @@ export class CheckoutService {
     this.cartStore.removeOneItemFromCart(id)
   }
 
-  private checkAndRemoveOrder() {
+  checkAndRemoveOrderIfEmpty(id: string){
+    const updatedOrder = this._orderSvc.getOrderById(id)
+    if(updatedOrder){
+      this._orderSvc.updateOrder(updatedOrder)
+    }
+  }
+
+   checkAndRemoveOrder() {
     if (this.order && this.cartStore.products().length === 0) {
       this._orderSvc.removeOneOrder(this.order.id);
     }
   }
+
+  removeOneOrderFromOrders(id: string){
+    this._orderSvc.removeOneOrder(id)
+  }
+
+
 
 }

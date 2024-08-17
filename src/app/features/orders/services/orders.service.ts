@@ -1,9 +1,9 @@
-import { inject, Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { IOrder } from "@shared/models/orders-interface";
-import { OrderStore } from "@shared/store/order.store";
-import { CartStore } from "@shared/store/shopping-cart.store";
-import { Status } from "@shared/utils/order-status";
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { IOrder } from '@shared/models/orders-interface';
+import { OrderStore } from '@shared/store/order.store';
+import { CartStore } from '@shared/store/shopping-cart.store';
+import { Status } from '@shared/utils/order-status';
 
 @Injectable({ providedIn: 'root' })
 
@@ -39,7 +39,6 @@ export class OrdersService {
         this.orderStore.addOrder(this.cartStore.products(), Status.CLOSED)
         this.cartStore.clearCart(false)
         this.router.navigate(["/orders"])
-        console.log(this.orderStore.orders())
       }
     } catch (error) {
       console.error(error);
@@ -77,4 +76,14 @@ export class OrdersService {
         this.router.navigate(['/orders'])
       }
     }
+
+   checkAndRemoveOrderIfEmpty(orderId: string) {
+      const order = this.orderStore.orders().find(o => o.id === orderId);
+
+      if (order && order.items.length === 0) {
+          this.removeOneOrder(orderId);
+      }
+  }
+
+
 }

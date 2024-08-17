@@ -25,6 +25,9 @@ export default class CheckoutComponent implements OnInit {
   }
 
   onClearAllFromCart(): void {
+    if(this.order){
+      this._checkoutSvc.removeOneOrderFromOrders(this.order.id)
+    }
     this._checkoutSvc.onClearAllFromCart()
   }
 

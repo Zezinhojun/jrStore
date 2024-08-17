@@ -1,4 +1,4 @@
-import { computed, effect, inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { IOrder } from '@shared/models/orders-interface';
 import { IOrderStore } from '@shared/models/orderStore-interface';
@@ -38,16 +38,14 @@ export const OrderStore = signalStore(
 
               if(existingOrder.ordersCount <= 0){
                 this.removeOneOrderFromOrders(order.id)
-                console.log("Removido com sucesso")
                 _toastSvc.info(ToastMessage.REMOVE_ORDER);
               } else{
-                console.log("Não removeu nada")
                 const updatedOrders = orders().map(o => o.id === order.id ? existingOrder : o);
+                console.log(updatedOrders)
                 patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
               }
       }
     },
-
 
         addOrder : async function (items: IProduct[], state: string, id?:string) {
             const orderid = id ?? uuidv4()
@@ -65,6 +63,7 @@ export const OrderStore = signalStore(
 
 
         },
+
         filterOrderByState: async (state:string) => {
           if (state === Status.PENDING) {
             state = Status.PENDING;
@@ -77,6 +76,7 @@ export const OrderStore = signalStore(
         clearFilter: async () => {
             patchState(store, { filteredOrders: orders() } as Partial<IOrderStore>);
         },
+
         removeAllOrders() {
             patchState(store, { orders: [], filteredOrders: [] } as Partial<IOrderStore>);
             _toastSvc.info(ToastMessage.ORDERS_CLEAN)

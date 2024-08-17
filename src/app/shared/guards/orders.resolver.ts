@@ -14,17 +14,14 @@ export const ordersResolver: ResolveFn<IOrder | null> = (route, state) => {
 
   if (id) {
     const order = _ordersSvc.getOrderById(id);
-
     if (order) {
       _checkSvc.loadCart(order.id);
       return of(order);
     } else {
-      console.error(`Order with ID ${id} not found.`);
       router.navigate(['/orders']);
       return of(null);
     }
   } else {
-    console.error('No order ID provided in the route.');
     router.navigate(['/orders']);
     return of(null);
   }
