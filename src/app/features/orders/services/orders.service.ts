@@ -39,6 +39,7 @@ export class OrdersService implements OnInit {
   }
 
   onContinueShopping(): any {
+    this.clearOrderId()
     this.router.navigate(["/"])
   }
 
