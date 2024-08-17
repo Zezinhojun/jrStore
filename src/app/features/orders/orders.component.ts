@@ -35,11 +35,29 @@ export default class OrdersComponent {
     this._ordersSvc.onContinueShopping()
   }
 
-  removeOneOrder(id:string){
+  removeOneOrder(id: string) {
     this._ordersSvc.removeOneOrder(id)
   }
 
-  onGoToCheckout(id: string){
+  onGoToCheckout(id: string) {
+    this.setOrderId(id)
+    this.setCurrentOrderId(id)
     this._ordersSvc.onGoToCheckout(id)
+  }
+
+  setCurrentOrderId(orderId: string) {
+    localStorage.setItem('currentOrderId', orderId);
+  }
+
+  clearCurrentOrderId() {
+    localStorage.removeItem('currentOrderId');
+  }
+
+  getCurrentOrderId(): string | null {
+    return localStorage.getItem('currentOrderId');
+  }
+
+  setOrderId(id: string) {
+    this._ordersSvc.setOrderId(id)
   }
 }

@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { inject, Injectable, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IOrder } from '@shared/models/orders-interface';
 import { OrderStore } from '@shared/store/order.store';
 import { CartStore } from '@shared/store/shopping-cart.store';
@@ -7,11 +7,20 @@ import { Status } from '@shared/utils/order-status';
 
 @Injectable({ providedIn: 'root' })
 
-export class OrdersService {
+export class OrdersService implements OnInit {
+
   private readonly router = inject(Router)
   private readonly cartStore = inject(CartStore)
   private readonly orderStore = inject(OrderStore)
   private readonly products = this.cartStore.products
+  route = inject(ActivatedRoute)
+  public orderId = signal<string>("")
+  order = signal<IOrder | null>(null)
+
+
+  ngOnInit(): void {
+    this.order = this.route.snapshot.data['order']
+  }
 
   clearFilter() {
     this.orderStore.clearFilter();
@@ -70,20 +79,77 @@ export class OrdersService {
   }
 
   updateOrder(order: IOrder, state?: string): void {
-      if(this.products().length > 0){
-        this.orderStore.updateOrder(order, this.products(), state)
-        this.cartStore.clearCart(false)
-        this.router.navigate(['/orders'])
-      }
+    if (this.products().length > 0) {
+      this.orderStore.updateOrder(order, this.products(), state)
+      this.cartStore.clearCart(false)
+      this.router.navigate(['/orders'])
     }
-
-   checkAndRemoveOrderIfEmpty(orderId: string) {
-      const order = this.orderStore.orders().find(o => o.id === orderId);
-
-      if (order && order.items.length === 0) {
-          this.removeOneOrder(orderId);
-      }
   }
+
+  checkAndRemoveOrderIfEmpty(orderId: string) {
+    const order = this.orderStore.orders().find(o => o.id === orderId);
+
+    if (order && order.items.length === 0) {
+      this.removeOneOrder(orderId);
+    }
+  }
+
+  setOrderId(id: string) {
+    this.orderId.set(id)
+    console.log(this.orderId())
+  }
+
+  getOrderId() {
+    return this.orderId()
+  }
+
+  clearOrderId() {
+    this.orderId.set("")
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //Local storage//
+
+  setCurrentOrderId(orderId: string) {
+    localStorage.setItem('currentOrderId', orderId);
+  }
+
+  clearCurrentOrderId() {
+    localStorage.removeItem('currentOrderId');
+  }
+
+  getCurrentOrderId(): string | null {
+    return localStorage.getItem('currentOrderId');
+  }
+
+  //Local storage//
 
 
 }

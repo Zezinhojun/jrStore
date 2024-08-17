@@ -13,15 +13,19 @@ export class CheckoutService {
   private readonly _orderSvc = inject(OrdersService)
   private readonly route = inject(ActivatedRoute);
   order: IOrder | null = null;
+  orderId: string | null
 
   constructor() {
+    this.orderId = this.getOrderId()
     this.order = this.route.snapshot.data['order'];
-    console.log(this.order)
     this.checkAndRemoveOrder();
   }
 
-  updateOrder(order:IOrder, state?: string){
-    this._orderSvc.updateOrder(order, state)
+  updateOrder(orderId: string, state?: string) {
+    const order = this._orderSvc.getOrderById(orderId)
+    if (order) {
+      this._orderSvc.updateOrder(order, state)
+    }
   }
 
   loadCart(id: string) {
@@ -34,15 +38,20 @@ export class CheckoutService {
     }
   }
 
-   onClearAllFromCart () {
-     this.cartStore.clearCart(true)
+  onClearAllFromCart() {
+    this.cartStore.clearCart(true)
   }
 
-   onSaveHowPending() {
-    this._orderSvc.onSaveHowPending()
-    this.router.navigate(["/"])
-    this.checkAndRemoveOrder();
-
+  onSaveHowPending() {
+    if (this.orderId) {
+      this.updateOrder(this.orderId)
+      this.clearCurrentOrderId()
+    } else {
+      this._orderSvc.onSaveHowPending()
+      this.router.navigate(["/"])
+      this.checkAndRemoveOrder();
+      this.clearOrderId()
+    }
   }
 
   onContinue() {
@@ -62,23 +71,42 @@ export class CheckoutService {
     this.cartStore.removeOneItemFromCart(id)
   }
 
-  checkAndRemoveOrderIfEmpty(id: string){
+  checkAndRemoveOrderIfEmpty(id: string) {
     const updatedOrder = this._orderSvc.getOrderById(id)
-    if(updatedOrder){
+    if (updatedOrder) {
       this._orderSvc.updateOrder(updatedOrder)
     }
   }
 
-   checkAndRemoveOrder() {
+  checkAndRemoveOrder() {
     if (this.order && this.cartStore.products().length === 0) {
       this._orderSvc.removeOneOrder(this.order.id);
     }
   }
 
-  removeOneOrderFromOrders(id: string){
+  removeOneOrderFromOrders(id: string) {
     this._orderSvc.removeOneOrder(id)
   }
 
 
 
+  setCurrentOrderId(orderId: string) {
+    localStorage.setItem('currentOrderId', orderId);
+  }
+
+  clearCurrentOrderId() {
+    localStorage.removeItem('currentOrderId');
+  }
+
+  getOrderId(): string | null {
+    return this._orderSvc.getOrderId()
+  }
+
+  clearOrderId() {
+    this._orderSvc.clearOrderId()
+  }
+
+  getOrderFromResolver() {
+    return this._orderSvc.order()
+  }
 }

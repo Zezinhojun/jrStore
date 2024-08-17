@@ -25,10 +25,12 @@ export default class CheckoutComponent implements OnInit {
   }
 
   onClearAllFromCart(): void {
-    if(this.order){
+    if (this.order) {
       this._checkoutSvc.removeOneOrderFromOrders(this.order.id)
+      this._checkoutSvc.clearCurrentOrderId()
     }
     this._checkoutSvc.onClearAllFromCart()
+    this._checkoutSvc.clearCurrentOrderId()
   }
 
   onContinue() {
@@ -36,19 +38,26 @@ export default class CheckoutComponent implements OnInit {
   }
 
   onCloseOrder(): void {
-    if(this.order){
+    const orderId = this._checkoutSvc.getOrderId()
+    if (orderId) {
       const state = Status.CLOSED
-      this._checkoutSvc.updateOrder(this.order, state)
-    } else{
+      this._checkoutSvc.updateOrder(orderId, state)
+      this._checkoutSvc.clearCurrentOrderId()
+    } else {
       this._checkoutSvc.onProceedToPayService()
+      this._checkoutSvc.clearCurrentOrderId()
     }
   }
 
   onSaveOrderAsPending() {
-    if(this.order){
-      this._checkoutSvc.updateOrder(this.order)
-    } else{
+
+    const orderId = this._checkoutSvc.getOrderId()
+    if (orderId) {
+      this._checkoutSvc.updateOrder(orderId)
+      this._checkoutSvc.clearCurrentOrderId()
+    } else {
       this._checkoutSvc.onSaveHowPending()
+      this._checkoutSvc.clearCurrentOrderId()
     }
   }
 
@@ -59,6 +68,8 @@ export default class CheckoutComponent implements OnInit {
   removeOneItem(id: number): void {
     this._checkoutSvc.removeOneItemFromCart(id)
   }
+
+
 
 
 }
