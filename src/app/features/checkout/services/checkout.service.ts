@@ -13,7 +13,7 @@ export class CheckoutService {
   private readonly _orderSvc = inject(OrdersService)
   private readonly route = inject(ActivatedRoute);
   order: IOrder | null = null;
-  orderId: string | null
+  orderId: string | undefined
 
   constructor() {
     this.orderId = this.getOrderId()
@@ -98,7 +98,7 @@ export class CheckoutService {
     localStorage.removeItem('currentOrderId');
   }
 
-  getOrderId(): string | null {
+  getOrderId(): string | undefined {
     return this._orderSvc.retrieveOrderId()
   }
 
