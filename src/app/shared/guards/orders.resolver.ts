@@ -13,7 +13,7 @@ export const ordersResolver: ResolveFn<IOrder | null> = (route, state) => {
   const id = route.paramMap.get('id');
 
   if (id) {
-    const order = _ordersSvc.getOrderById(id);
+    const order = _ordersSvc.findOrderById(id);
     if (order) {
       _checkSvc.loadCart(order.id);
       return of(order);

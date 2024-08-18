@@ -1,7 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-
 import { OrderStore } from '@shared/store/order.store';
+
 import { OrdersService } from './services/orders.service';
 
 @Component({
@@ -11,12 +11,13 @@ import { OrdersService } from './services/orders.service';
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'
 })
+
 export default class OrdersComponent {
   private readonly _ordersSvc = inject(OrdersService)
   public orderStore = inject(OrderStore)
 
   applyFilter(state: string) {
-    this._ordersSvc.filterOrderByState(state);
+    this._ordersSvc.filterOrdersByState(state);
   }
 
   clearFilter() {
@@ -24,40 +25,23 @@ export default class OrdersComponent {
   }
 
   clearOrders() {
-    this._ordersSvc.clearOrders()
+    this._ordersSvc.removeAllOrders()
   }
 
   onCloseOrder(): void {
-    this._ordersSvc.onCloseOrder()
+    this._ordersSvc.closeOrder()
   }
 
   onContinue(): void {
-    this._ordersSvc.onContinueShopping()
+    this._ordersSvc.continueShopping()
   }
 
   removeOneOrder(id: string) {
-    this._ordersSvc.removeOneOrder(id)
+    this._ordersSvc.removeOrderById(id)
   }
 
   onGoToCheckout(id: string) {
-    this.setOrderId(id)
-    this.setCurrentOrderId(id)
-    this._ordersSvc.onGoToCheckout(id)
-  }
-
-  setCurrentOrderId(orderId: string) {
-    localStorage.setItem('currentOrderId', orderId);
-  }
-
-  clearCurrentOrderId() {
-    localStorage.removeItem('currentOrderId');
-  }
-
-  getCurrentOrderId(): string | null {
-    return localStorage.getItem('currentOrderId');
-  }
-
-  setOrderId(id: string) {
-    this._ordersSvc.setOrderId(id)
+    this._ordersSvc.storeOrderId(id)
+    this._ordersSvc.goToCheckout(id)
   }
 }

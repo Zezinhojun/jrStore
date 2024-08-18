@@ -1,156 +1,85 @@
-import { inject, Injectable, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { inject, Injectable, signal } from '@angular/core';
 import { IOrder } from '@shared/models/orders-interface';
 import { OrderStore } from '@shared/store/order.store';
-import { CartStore } from '@shared/store/shopping-cart.store';
 import { Status } from '@shared/utils/order-status';
+import { CartService } from './cart/cart.service';
+import { NavigationService } from '@shared/services/navigation/navigation.service';
 
 @Injectable({ providedIn: 'root' })
 
-export class OrdersService implements OnInit {
-
-  private readonly router = inject(Router)
-  private readonly cartStore = inject(CartStore)
-  private readonly orderStore = inject(OrderStore)
-  private readonly products = this.cartStore.products
-  route = inject(ActivatedRoute)
+export class OrdersService {
   public orderId = signal<string>("")
-  order = signal<IOrder | null>(null)
 
+  private readonly _cartSvc = inject(CartService)
+  private readonly _navigationSvc = inject(NavigationService)
+  private readonly orderStore = inject(OrderStore)
 
-  ngOnInit(): void {
-    this.order = this.route.snapshot.data['order']
-  }
-
-  clearFilter() {
+  clearFilter(): void {
     this.orderStore.clearFilter();
   }
 
-  clearOrders() {
+  findOrderById(id: string): IOrder | undefined {
+    return this.orderStore.findOrderById(id)
+  }
+
+  filterOrdersByState(state: string): void {
+    this.orderStore.filterOrdersByState(state)
+  }
+
+  removeAllOrders(): void {
     this.orderStore.removeAllOrders()
   }
 
-  getOrderById(id: string) {
-    return this.orderStore.getOrderById(id)
+  removeOrderById(id: string): void {
+    this.orderStore.removeOrderById(id)
   }
 
-  filterOrderByState(state: string) {
-    this.orderStore.filterOrderByState(state)
-  }
-
-  onContinueShopping(): any {
-    this.clearOrderId()
-    this.router.navigate(["/"])
-  }
-
-  onCloseOrder(): any {
-    try {
-      if (this.products().length > 0) {
-        this.orderStore.addOrder(this.cartStore.products(), Status.CLOSED)
-        this.cartStore.clearCart(false)
-        this.router.navigate(["/orders"])
-      }
-    } catch (error) {
-      console.error(error);
+  closeOrder(): void {
+    if (!this._cartSvc.hasProduct()) {
+      console.log("Carrinho está vazio");
+      return
     }
+    this.orderStore.addOrder(this._cartSvc.getProduct(), Status.CLOSED)
+    this._cartSvc.clearCart()
+    this.resetOrderId()
+    this._navigationSvc.navigateToOrders()
   }
 
-  onGoToCheckout(id: string) {
-    const order = this.orderStore.getOrderById(id);
-    if (order) {
-      this.router.navigate(['/checkout', id]);
-    } else {
-      console.error('Order not found');
+  saveOrderAsPending(): void {
+    if (this._cartSvc.hasProduct()) {
+      this.orderStore.addOrder(this._cartSvc.getProduct(), Status.PENDING)
+      this._cartSvc.clearCart()
+      this.resetOrderId()
     }
-  }
-
-  onSaveHowPending() {
-    try {
-      if (this.products().length > 0) {
-        this.orderStore.addOrder(this.products(), Status.PENDING)
-        this.cartStore.clearCart(false)
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  removeOneOrder(id: string) {
-    this.orderStore.removeOneOrderFromOrders(id)
   }
 
   updateOrder(order: IOrder, state?: string): void {
-    if (this.products().length > 0) {
-      this.orderStore.updateOrder(order, this.products(), state)
-      this.cartStore.clearCart(false)
-      this.router.navigate(['/orders'])
+    if (this._cartSvc.hasProduct()) {
+      this.orderStore.updateOrder(order, this._cartSvc.getProduct(), state)
+      this._cartSvc.clearCart()
+      this.resetOrderId()
+      this._navigationSvc.navigateToOrders()
     }
   }
 
-  checkAndRemoveOrderIfEmpty(orderId: string) {
-    const order = this.orderStore.orders().find(o => o.id === orderId);
-
-    if (order && order.items.length === 0) {
-      this.removeOneOrder(orderId);
-    }
-  }
-
-  setOrderId(id: string) {
+  storeOrderId(id: string): void {
     this.orderId.set(id)
-    console.log(this.orderId())
   }
 
-  getOrderId() {
+  retrieveOrderId(): string {
     return this.orderId()
   }
 
-  clearOrderId() {
+  resetOrderId(): void {
     this.orderId.set("")
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //Local storage//
-
-  setCurrentOrderId(orderId: string) {
-    localStorage.setItem('currentOrderId', orderId);
+  continueShopping(): void {
+    this.resetOrderId()
+    this._navigationSvc.navigateHome()
   }
 
-  clearCurrentOrderId() {
-    localStorage.removeItem('currentOrderId');
+  goToCheckout(id: string): void {
+    this._navigationSvc.navigateToCheckout(id);
   }
-
-  getCurrentOrderId(): string | null {
-    return localStorage.getItem('currentOrderId');
-  }
-
-  //Local storage//
-
-
 }

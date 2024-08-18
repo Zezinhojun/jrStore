@@ -7,6 +7,7 @@ import { Status } from '@shared/utils/order-status';
 import { ToastMessage } from '@shared/utils/toast-message';
 import { ToastrService } from 'ngx-toastr';
 import { v4 as uuidv4 } from 'uuid';
+import * as  orderUtils from '../utils/order-utils'
 
 const initialState: IOrderStore = {
   orders: [],
@@ -19,24 +20,23 @@ export const OrderStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed(({ orders, filteredOrders }) => ({
-    ordersCount: computed(() => calculateTotalOrderCount(orders())),
-    totalAmount: computed(() => calculateTotalAmount(orders())),
+    ordersCount: computed(() => orderUtils.calculateTotalOrderCount(orders())),
+    totalAmount: computed(() => orderUtils.calculateTotalAmount(orders())),
     filteredOrders: computed(() => filteredOrders())
   })),
 
   withMethods(({ orders, ...store }, _toastSvc = inject(ToastrService)) => ({
-
     updateOrder(order: IOrder, items: IProduct[], state?: string) {
       const status = state ?? Status.PENDING
       const existingOrder = orders().find(o => o.id === order.id);
       if (existingOrder) {
         existingOrder.items = items;
         existingOrder.state = status;
-        existingOrder.totalAmount = calculateTotalAmountForOrder(existingOrder);
-        existingOrder.ordersCount = calculateOrderCountForOrder(existingOrder);
+        existingOrder.totalAmount = orderUtils.calculateTotalAmountForOrder(existingOrder);
+        existingOrder.ordersCount = orderUtils.calculateOrderCountForOrder(existingOrder);
 
         if (existingOrder.ordersCount <= 0) {
-          this.removeOneOrderFromOrders(order.id)
+          this.removeOrderById(order.id)
           _toastSvc.info(ToastMessage.REMOVE_ORDER);
         } else {
           const updatedOrders = orders().map(o => o.id === order.id ? existingOrder : o);
@@ -45,14 +45,14 @@ export const OrderStore = signalStore(
       }
     },
 
-    addOrder: async function (items: IProduct[], state: string, id?: string) {
+    addOrder: (items: IProduct[], state: string, id?: string): void => {
       const orderid = id ?? uuidv4()
       const newOrder: IOrder = {
         id: orderid,
         state,
         items,
-        totalAmount: calculateTotalAmountForOrder({ id: orderid, state, items, totalAmount: 0, ordersCount: 0 }),
-        ordersCount: calculateOrderCountForOrder({ id: orderid, state, items, totalAmount: 0, ordersCount: 0 })
+        totalAmount: orderUtils.calculateTotalAmountForOrder({ id: orderid, state, items, totalAmount: 0, ordersCount: 0 }),
+        ordersCount: orderUtils.calculateOrderCountForOrder({ id: orderid, state, items, totalAmount: 0, ordersCount: 0 })
       }
 
       const updatedOrders = [...orders(), newOrder];
@@ -60,7 +60,7 @@ export const OrderStore = signalStore(
       _toastSvc.success(ToastMessage.ADD_ORDER)
     },
 
-    filterOrderByState: async (state: string) => {
+    filterOrdersByState: (state: string): void => {
       if (state === Status.PENDING) {
         state = Status.PENDING;
       } else {
@@ -69,42 +69,25 @@ export const OrderStore = signalStore(
       patchState(store, { filteredOrders: filtered } as Partial<IOrderStore>)
     },
 
-    clearFilter: async () => {
+    clearFilter: (): void => {
       patchState(store, { filteredOrders: orders() } as Partial<IOrderStore>);
     },
 
-    removeAllOrders() {
+    removeAllOrders: (): void => {
       patchState(store, { orders: [], filteredOrders: [] } as Partial<IOrderStore>);
       _toastSvc.info(ToastMessage.ORDERS_CLEAN)
     },
 
-    removeOneOrderFromOrders(id: string) {
+    removeOrderById(id: string) {
       const currentOrders = orders();
       const updatedOrders = currentOrders.filter(order => order.id !== id);
       patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
       _toastSvc.info(ToastMessage.REMOVE_ORDER);
     },
 
-    getOrderById(id: string) {
+    findOrderById: (id: string): IOrder | undefined => {
       const currentOrder = orders()
       return currentOrder.find(order => order.id === id)
     }
   })),
 );
-
-
-const calculateTotalAmountForOrder = (order: IOrder): number => {
-  return parseFloat(order.items.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2));
-}
-
-const calculateOrderCountForOrder = (order: IOrder): number => {
-  return order.items.reduce((acc, item) => acc + item.qty, 0);
-}
-
-const calculateTotalAmount = (orders: IOrder[]): number => {
-  return orders.reduce((acc, order) => acc + order.totalAmount, 0);
-}
-
-const calculateTotalOrderCount = (orders: IOrder[]): number => {
-  return orders.reduce((acc, order) => acc + order.ordersCount, 0);
-}

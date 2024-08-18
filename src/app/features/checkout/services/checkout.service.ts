@@ -22,14 +22,14 @@ export class CheckoutService {
   }
 
   updateOrder(orderId: string, state?: string) {
-    const order = this._orderSvc.getOrderById(orderId)
+    const order = this._orderSvc.findOrderById(orderId)
     if (order) {
       this._orderSvc.updateOrder(order, state)
     }
   }
 
   loadCart(id: string) {
-    const order = this._orderSvc.getOrderById(id)
+    const order = this._orderSvc.findOrderById(id)
     if (order) {
       this.cartStore.clearCart(false)
       order.items.forEach((item: IProduct) => {
@@ -47,7 +47,7 @@ export class CheckoutService {
       this.updateOrder(this.orderId)
       this.clearCurrentOrderId()
     } else {
-      this._orderSvc.onSaveHowPending()
+      this._orderSvc.saveOrderAsPending()
       this.router.navigate(["/"])
       this.checkAndRemoveOrder();
       this.clearOrderId()
@@ -59,7 +59,7 @@ export class CheckoutService {
   }
 
   onProceedToPayService(): any {
-    this._orderSvc.onCloseOrder()
+    this._orderSvc.closeOrder()
     this.checkAndRemoveOrder();
   }
 
@@ -72,7 +72,7 @@ export class CheckoutService {
   }
 
   checkAndRemoveOrderIfEmpty(id: string) {
-    const updatedOrder = this._orderSvc.getOrderById(id)
+    const updatedOrder = this._orderSvc.findOrderById(id)
     if (updatedOrder) {
       this._orderSvc.updateOrder(updatedOrder)
     }
@@ -80,12 +80,12 @@ export class CheckoutService {
 
   checkAndRemoveOrder() {
     if (this.order && this.cartStore.products().length === 0) {
-      this._orderSvc.removeOneOrder(this.order.id);
+      this._orderSvc.removeOrderById(this.order.id);
     }
   }
 
   removeOneOrderFromOrders(id: string) {
-    this._orderSvc.removeOneOrder(id)
+    this._orderSvc.removeOrderById(id)
   }
 
 
@@ -99,14 +99,11 @@ export class CheckoutService {
   }
 
   getOrderId(): string | null {
-    return this._orderSvc.getOrderId()
+    return this._orderSvc.retrieveOrderId()
   }
 
   clearOrderId() {
-    this._orderSvc.clearOrderId()
+    this._orderSvc.resetOrderId()
   }
 
-  getOrderFromResolver() {
-    return this._orderSvc.order()
-  }
 }
