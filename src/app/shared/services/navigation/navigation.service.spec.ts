@@ -1,21 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { NavigationService } from './navigation.service';
 import { Router } from '@angular/router';
+import MockRouter from 'app/__tests__/__mocks__/mockRouter';
 
 
 describe('Service: Navigation', () => {
-
   let navigationService: NavigationService
-  let router: jasmine.SpyObj<Router>
+  let mockRouter: jasmine.SpyObj<Router>;
+
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('Router', ['navigate']);
+    mockRouter = new MockRouter().router as jasmine.SpyObj<Router>;
     TestBed.configureTestingModule({
       providers: [NavigationService,
-        { provide: Router, useValue: spy }
+        { provide: Router, useValue: mockRouter }
       ]
     });
     navigationService = TestBed.inject(NavigationService);
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+
   });
 
   it('should be created', () => {
@@ -24,17 +25,17 @@ describe('Service: Navigation', () => {
 
   it('should navigate to orders', () => {
     navigationService.navigateToOrders();
-    expect(router.navigate).toHaveBeenCalledWith(['/orders']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/orders']);
   });
 
   it('should navigate to checkout with an ID', () => {
     const testId = '123';
     navigationService.navigateToCheckout(testId);
-    expect(router.navigate).toHaveBeenCalledWith(['/checkout', testId]);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/checkout', testId]);
   });
 
   it('should navigate to home', () => {
     navigationService.navigateHome();
-    expect(router.navigate).toHaveBeenCalledWith(['/']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
   });
 });
