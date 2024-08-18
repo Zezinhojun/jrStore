@@ -17,7 +17,9 @@ export class CartService {
   }
 
   clearCart(): void {
-    this.cartStore.clearCart(false)
+    if (this.cartStore.products().length === 0) {
+      this.cartStore.clearCart(false);
+    }
   }
 
 }

@@ -4,26 +4,9 @@ import OrdersComponent from './orders.component';
 import { OrdersService } from './services/orders.service';
 import { ToastrService } from 'ngx-toastr';
 import { Status } from '@shared/utils/order-status';
+import MockOrdersService from 'app/__tests__/__mocks__/mockOrdersService';
+import MockToastrService from 'app/__tests__/__mocks__/mockToastrService';
 
-
-// Mocks
-class MockOrdersService {
-  filterOrdersByState = jasmine.createSpy('filterOrdersByState');
-  clearFilter = jasmine.createSpy('clearFilter');
-  removeAllOrders = jasmine.createSpy('removeAllOrders');
-  closeOrder = jasmine.createSpy('closeOrder');
-  continueShopping = jasmine.createSpy('continueShopping');
-  removeOrderById = jasmine.createSpy('removeOrderById');
-  storeOrderId = jasmine.createSpy('storeOrderId');
-  goToCheckout = jasmine.createSpy('goToCheckout');
-}
-
-class MockToastrService {
-  success = jasmine.createSpy('success');
-  info = jasmine.createSpy('info');
-  error = jasmine.createSpy('error');
-  warning = jasmine.createSpy('warning');
-}
 
 describe('OrdersComponent', () => {
   let component: OrdersComponent;

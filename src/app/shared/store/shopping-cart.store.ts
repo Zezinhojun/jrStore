@@ -35,13 +35,13 @@ export const CartStore = signalStore(
       toastSvc.success(ToastMessage.ADD_ITEM)
     },
 
-    async removeFromCart(id: number) {
+    removeFromCart(id: number) {
       const updateProducts = products().filter(product => product.id !== id)
       patchState(store, { products: updateProducts })
       toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
 
-    async removeOneItemFromCart(id: number) {
+    removeOneItemFromCart(id: number) {
       const currentProducts = products();
       const updatedProducts = currentProducts.map(product => {
         if (product.id === id) {
@@ -54,13 +54,13 @@ export const CartStore = signalStore(
       patchState(store, { products: updatedProducts });
       if (currentProducts
         .find(product => product.id === id && product.qty <= 0)) {
-        await this.removeFromCart(id);
+        this.removeFromCart(id);
       }
       products().length !== 0 ? toastSvc.info(ToastMessage.REMOVE_ONE)
         : toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
 
-   async  clearCart(finished: boolean) {
+    clearCart(finished: boolean) {
       patchState(store, initialState)
       if (finished) toastSvc.info(ToastMessage.CART_CLEAN)
     }
