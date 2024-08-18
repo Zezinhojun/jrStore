@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class NavigationService {
-
   private router = inject(Router)
 
   navigateToOrders(): void {
@@ -19,6 +18,5 @@ export class NavigationService {
   navigateHome(): void {
     this.router.navigate(['/']);
   }
-
 
 }
