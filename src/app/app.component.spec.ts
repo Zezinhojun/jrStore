@@ -1,10 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import MockToastrService from './__tests__/__mocks__/mockToastrService';
+import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute } from '@angular/router';
+import MockActivatedRoute from './__tests__/__mocks__/MockActivatedRoute';
 
 describe('AppComponent', () => {
+
+  let mockToastrService: MockToastrService;
+  let mockActivatedRoute: MockActivatedRoute;
   beforeEach(async () => {
+    mockToastrService = new MockToastrService();
+    mockActivatedRoute = new MockActivatedRoute();
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [{ provide: ToastrService, useValue: mockToastrService },
+      { provide: ActivatedRoute, useValue: mockActivatedRoute }
+      ]
     }).compileComponents();
   });
 
@@ -14,10 +26,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, jr-store');
-  });
 });

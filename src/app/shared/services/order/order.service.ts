@@ -16,6 +16,7 @@ export class OrderService {
   readonly filteredOrders = signal(() => this.OrderStore.filteredOrders())
 
   addOrder(items: IProduct[], state: string, id?: string): void {
+    console.log('addOrder called with:', items, state, id); // Log para depuração
     try {
       this.OrderStore.addOrder(items, state, id);
     } catch (error) {

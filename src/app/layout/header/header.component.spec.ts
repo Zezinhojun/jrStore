@@ -1,17 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
+import MockToastrService from 'app/__tests__/__mocks__/mockToastrService';
+import { ToastrService } from 'ngx-toastr';
+import MockActivatedRoute from 'app/__tests__/__mocks__/MockActivatedRoute';
+import { ActivatedRoute } from '@angular/router';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let mockToastrService: MockToastrService;
+  let mockActivatedRoute: MockActivatedRoute;
 
   beforeEach(async () => {
+    mockToastrService = new MockToastrService();
+    mockActivatedRoute = new MockActivatedRoute();
+
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [HeaderComponent],
+      providers: [
+        { provide: ToastrService, useValue: mockToastrService },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+      ]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
