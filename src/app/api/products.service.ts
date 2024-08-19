@@ -13,11 +13,11 @@ export class ProductsService {
   private readonly _injector = inject(EnvironmentInjector)
 
   constructor() {
-    this.getProducts()
+    this.getProducts('desc')
   }
 
-  public getProducts(): void {
-    this._http.get<IProduct[]>(`${this._endPoint}/products/?sort=desc`)
+  public getProducts(order: 'asc' | 'desc'): void {
+    this._http.get<IProduct[]>(`${this._endPoint}/products/?sort=${order}`)
       .pipe(
         map((products: IProduct[]) => products
           .map((product: IProduct) => ({ ...product, qty: 1 }))

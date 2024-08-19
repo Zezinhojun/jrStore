@@ -17,7 +17,8 @@ export const appConfig: ApplicationConfig = {
       closeButton: true
     }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withFetch(),
+    provideHttpClient(
+      withFetch(),
       withInterceptors([ErrorResponseInterceptor, SpinnerInterceptor])
     ),
   ]

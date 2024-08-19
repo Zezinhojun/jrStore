@@ -13,4 +13,5 @@ import { CartStore } from '@shared/store/shopping-cart.store';
 export class HeaderComponent {
   showCart = signal<boolean>(false)
   cartStore = inject(CartStore)
+
 }
