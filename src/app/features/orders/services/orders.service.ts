@@ -64,7 +64,7 @@ export class OrdersService {
         return;
       }
       this.orderStore.addOrder(this._cartSvc.getProduct(), Status.CLOSED);
-      this._cartSvc.clearCart();
+      this._cartSvc.clearCart(false);
       this.resetOrderId();
       this._navigationSvc.navigateToOrders();
     } catch (error) {
@@ -76,7 +76,7 @@ export class OrdersService {
     try {
       if (this._cartSvc.hasProduct()) {
         this.orderStore.addOrder(this._cartSvc.getProduct(), Status.PENDING)
-        this._cartSvc.clearCart()
+        this._cartSvc.clearCart(false)
         this.resetOrderId()
       }
     } catch (error) {
@@ -89,7 +89,7 @@ export class OrdersService {
     try {
       if (this._cartSvc.hasProduct()) {
         this.orderStore.updateOrder(order, this._cartSvc.getProduct(), state)
-        this._cartSvc.clearCart()
+        this._cartSvc.clearCart(false)
         this.resetOrderId()
         this._navigationSvc.navigateToOrders()
       }

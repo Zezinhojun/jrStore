@@ -3,7 +3,7 @@
     <div class="flex flex-col w-full mb-20 text-center">
       <h1 class="mb-2 text-3xl font-medium text-gray-900 sm:text-4xl title-font">Checkout page</h1>
     </div>
-    @if(cartStore.productsCount()) {
+    @if(cartProductsCount()) {
     <div class="w-full mx-auto overflow-auto lg:w-2/3">
       <div class="flex justify-end p-2 mb-4">
         <button (click)="onClearAllFromCart()"
@@ -25,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of cartStore.products(); track $index) {
+          @for (item of cartProducts(); track $index) {
           <tr>
             <td class="px-4 py-3">{{item.title}}</td>
             <td class="flex justify-center py-3">{{item.qty}}</td>
@@ -53,7 +53,7 @@
                 Total:
               </span>
             </td>
-            <td class="px-4 py-3 text-lg not-italic font-bold text-gray-900">{{cartStore.totalAmount() |
+            <td class="px-4 py-3 text-lg not-italic font-bold text-gray-900">{{cartTotalAmount() |
               currency:'BRL':'symbol'}}
             </td>
           </tr>

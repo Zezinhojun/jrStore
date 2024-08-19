@@ -43,7 +43,7 @@ describe('Service: Cart', () => {
 
   it('should call CartStore\'s clearCart method when CartService\'s clearCart is invoked', () => {
     mockCartStore.products.and.returnValue([]);
-    cartService.clearCart();
+    cartService.clearCart(true);
     expect(mockCartStore.clearCart).toHaveBeenCalledWith(false);
   });
 
@@ -55,7 +55,7 @@ describe('Service: Cart', () => {
 
   it('should not call CartStore\'s clearCart method if products exist in the cart', () => {
     mockCartStore.products.and.returnValue(mockProducts);
-    cartService.clearCart();
+    cartService.clearCart(false);
     expect(mockCartStore.clearCart).not.toHaveBeenCalled();
   });
 });

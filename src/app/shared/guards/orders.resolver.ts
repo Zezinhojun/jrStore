@@ -15,7 +15,7 @@ export const ordersResolver: ResolveFn<IOrder | null> = (route, state) => {
   if (id) {
     const order = _ordersSvc.findOrderById(id);
     if (order) {
-      _checkSvc.loadCart(order.id);
+      _checkSvc.populateCartFromOrder(order.id);
       return of(order);
     } else {
       router.navigate(['/orders']);

@@ -1,9 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IOrder } from '@shared/models/orders-interface';
-import { CartStore } from '@shared/store/shopping-cart.store';
-import { Status } from '@shared/utils/order-status';
+import { Component, inject } from '@angular/core';
 
 import { CheckoutService } from './services/checkout.service';
 
@@ -14,66 +10,35 @@ import { CheckoutService } from './services/checkout.service';
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
-export default class CheckoutComponent implements OnInit {
-  private readonly _checkoutSvc = inject(CheckoutService)
-  private readonly route = inject(ActivatedRoute)
-  public cartStore = inject(CartStore)
-  private order: IOrder | null = null
 
-  ngOnInit() {
-    this.order = this.route.snapshot.data['order'];
-  }
+export default class CheckoutComponent {
+  private readonly _checkoutSvc = inject(CheckoutService)
+  public cartProducts = this._checkoutSvc.getCartProducts();
+  public cartTotalAmount = this._checkoutSvc.getCartTotalAmount();
+  public cartProductsCount = this._checkoutSvc.getCartProductsCount();
 
   onClearAllFromCart(): void {
-    if (this.order) {
-      this._checkoutSvc.removeOneOrderFromOrders(this.order.id)
-      this._checkoutSvc.clearOrderId()
-    }
-    this._checkoutSvc.onClearAllFromCart()
-    this._checkoutSvc.clearOrderId()
+    this._checkoutSvc.handleClearAllFromCart();
   }
 
   onContinue() {
-    this._checkoutSvc.onContinue()
+    this._checkoutSvc.navigateToHomePage()
   }
 
   onCloseOrder(): void {
-    const orderId = this._checkoutSvc.getOrderId()
-    if (orderId) {
-      const state = Status.CLOSED
-      this._checkoutSvc.updateOrder(orderId, state)
-      this._checkoutSvc.clearOrderId()
-      this.cartStore.clearCart(false)
-    } else {
-      this._checkoutSvc.onProceedToPayService()
-      this._checkoutSvc.clearOrderId()
-      this.cartStore.clearCart(false)
-    }
+    this._checkoutSvc.finalizeOrder();
   }
 
   onSaveOrderAsPending() {
-
-    const orderId = this._checkoutSvc.getOrderId()
-    if (orderId) {
-      this._checkoutSvc.updateOrder(orderId)
-      this._checkoutSvc.clearOrderId()
-      this.cartStore.clearCart(false)
-    } else {
-      this._checkoutSvc.onSaveHowPending()
-      this._checkoutSvc.clearOrderId()
-      this.cartStore.clearCart(false)
-    }
+    this._checkoutSvc.saveOrderAsPending()
   }
 
   removeItem(id: number): void {
-    this._checkoutSvc.removeItem(id)
+    this._checkoutSvc.removeProductFromCart(id)
   }
 
   removeOneItem(id: number): void {
-    this._checkoutSvc.removeOneItemFromCart(id)
+    this._checkoutSvc.decrementProductQuantity(id)
   }
-
-
-
 
 }

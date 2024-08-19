@@ -1,24 +1,31 @@
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { inject, Injectable, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { IOrder } from '@shared/models/orders-interface';
 import { IProduct } from '@shared/models/products-interface';
-import { CartStore } from '@shared/store/shopping-cart.store';
+import { NavigationService } from '@shared/services/navigation/navigation.service';
+import { Status } from '@shared/utils/order-status';
+import { CartService } from 'app/features/orders/services/cart/cart.service';
 import { OrdersService } from 'app/features/orders/services/orders.service';
 
 @Injectable({ providedIn: 'root' })
 
-export class CheckoutService {
-  private readonly router = inject(Router)
-  private readonly cartStore = inject(CartStore)
+export class CheckoutService implements OnInit {
+  private readonly _navigationSvc = inject(NavigationService)
   private readonly _orderSvc = inject(OrdersService)
+  private readonly _cartSvc = inject(CartService)
   private readonly route = inject(ActivatedRoute);
   order: IOrder | null = null;
-  orderId: string | undefined
 
-  constructor() {
-    this.orderId = this.getOrderId()
-    this.order = this.route.snapshot.data['order'];
-    this.checkAndRemoveOrder();
+  ngOnInit(): void {
+    this.initializeOrderFromRoute()
+  }
+
+  private initializeOrderFromRoute() {
+    this.order = this.route.snapshot.data['order']
+  }
+
+  getOrder() {
+    return this.order
   }
 
   updateOrder(orderId: string, state?: string) {
@@ -28,82 +35,106 @@ export class CheckoutService {
     }
   }
 
-  loadCart(id: string) {
+  populateCartFromOrder(id: string): void {
     const order = this._orderSvc.findOrderById(id)
     if (order) {
-      this.cartStore.clearCart(false)
+      this._cartSvc.clearCart(false)
       order.items.forEach((item: IProduct) => {
-        this.cartStore.addToCart(item)
+        this._cartSvc.addToCart(item)
       })
     }
   }
 
-  onClearAllFromCart() {
-    this.cartStore.clearCart(true)
+  clearCartContents(notification: boolean) {
+    this._cartSvc.clearCart(notification);
   }
 
-  onSaveHowPending() {
-    if (this.orderId) {
-      this.updateOrder(this.orderId)
-      this.clearCurrentOrderId()
+  saveOrderAsPending() {
+    const orderId = this.retrieveCurrentOrderId()
+    if (orderId) {
+      this.updateOrder(orderId)
+      this.resetCurrentOrderId()
     } else {
       this._orderSvc.saveOrderAsPending()
-      this.router.navigate(["/"])
-      this.checkAndRemoveOrder();
-      this.clearOrderId()
+      this._navigationSvc.navigateToOrders()
+      this.removeOrderIfEmpty();
+      this.resetCurrentOrderId()
     }
+    this.clearCartContents(false)
   }
 
-  onContinue() {
-    this.router.navigate(["/"])
+  finalizeOrder() {
+    const orderId = this.retrieveCurrentOrderId()
+    if (orderId) {
+      const state = Status.CLOSED
+      this.updateOrder(orderId, state)
+      this.resetCurrentOrderId()
+    } else {
+      this.completeOrderProcessing();
+      this.resetCurrentOrderId()
+    }
+    this.clearCartContents(false)
   }
 
-  onProceedToPayService(): any {
+  navigateToHomePage() {
+    this._navigationSvc.navigateHome()
+  }
+
+  completeOrderProcessing(): any {
     this._orderSvc.closeOrder()
-    this.checkAndRemoveOrder();
+    this.removeOrderIfEmpty();
   }
 
-  removeItem(id: number) {
-    this.cartStore.removeFromCart(id)
+  removeProductFromCart(id: number) {
+    this._cartSvc.removeFromCart(id)
   }
 
-  removeOneItemFromCart(id: number): void {
-    this.cartStore.removeOneItemFromCart(id)
+  decrementProductQuantity(id: number): void {
+    this._cartSvc.removeFromCart(id)
   }
 
-  checkAndRemoveOrderIfEmpty(id: string) {
+  removeOrderIfCartIsEmpty(id: string) {
     const updatedOrder = this._orderSvc.findOrderById(id)
     if (updatedOrder) {
       this._orderSvc.updateOrder(updatedOrder)
     }
   }
 
-  checkAndRemoveOrder() {
-    if (this.order && this.cartStore.products().length === 0) {
+  removeOrderIfEmpty() {
+    if (this.order && this._cartSvc.products().length === 0) {
       this._orderSvc.removeOrderById(this.order.id);
     }
   }
 
-  removeOneOrderFromOrders(id: string) {
+  deleteOrderById(id: string) {
     this._orderSvc.removeOrderById(id)
   }
 
-
-
-  setCurrentOrderId(orderId: string) {
-    localStorage.setItem('currentOrderId', orderId);
-  }
-
-  clearCurrentOrderId() {
-    localStorage.removeItem('currentOrderId');
-  }
-
-  getOrderId(): string | undefined {
+  retrieveCurrentOrderId(): string | undefined {
     return this._orderSvc.retrieveOrderId()
   }
 
-  clearOrderId() {
+  resetCurrentOrderId() {
     this._orderSvc.resetOrderId()
   }
 
+  handleClearAllFromCart() {
+    if (this.order) {
+      this.deleteOrderById(this.order.id);
+    }
+    this.clearCartContents(true);
+    this.resetCurrentOrderId();
+  }
+
+  getCartProducts() {
+    return this._cartSvc.products();
+  }
+
+  getCartTotalAmount() {
+    return this._cartSvc.totalAmount();
+  }
+
+  getCartProductsCount() {
+    return this._cartSvc.productsCount();
+  }
 }
