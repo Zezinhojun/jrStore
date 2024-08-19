@@ -23,7 +23,7 @@ export class OrderService {
     }
   }
 
-  updateOrder(order: IOrder, items: IProduct[], state?: string): void {
+  updateOrderById(order: IOrder, items: IProduct[], state?: string): void {
     try {
       this.OrderStore.updateOrderById(order, items, state);
     } catch (error) {
@@ -39,7 +39,7 @@ export class OrderService {
     }
   }
 
-  clearFilter(): void {
+  resetOrderFilter(): void {
     try {
       this.OrderStore.resetOrderFilter();
     } catch (error) {
@@ -47,7 +47,7 @@ export class OrderService {
     }
   }
 
-  removeAllOrders(): void {
+  deleteAllOrders(): void {
     try {
       this.OrderStore.deleteAllOrders();
     } catch (error) {
@@ -55,7 +55,7 @@ export class OrderService {
     }
   }
 
-  removeOrderById(id: string): void {
+  deleteOrderById(id: string): void {
     try {
       this.OrderStore.deleteOrderById(id);
     } catch (error) {
@@ -63,7 +63,7 @@ export class OrderService {
     }
   }
 
-  findOrderById(id: string): IOrder | undefined {
+  getOrderById(id: string): IOrder | undefined {
     try {
       return this.OrderStore.getOrderById(id);
     } catch (error) {

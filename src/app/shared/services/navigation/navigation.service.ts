@@ -1,22 +1,38 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import GlobalErrorHandler from '../globalErrorHandling/globalErrorHandler.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class NavigationService {
   private router = inject(Router)
+  private _globalErrorHandlerSvc = inject(GlobalErrorHandler)
 
-  navigateToOrders(): void {
-    this.router.navigate(['/orders']);
+  async navigateToOrders() {
+    try {
+      await this.router.navigate(['/orders']);
+    } catch (error) {
+      this._globalErrorHandlerSvc.handleError(error)
+    }
   }
 
-  navigateToCheckout(id: string): void {
-    this.router.navigate(['/checkout', id]);
+  async navigateToCheckout(id: string) {
+    try {
+      await this.router.navigate(['/checkout', id]);
+    } catch (error) {
+      this._globalErrorHandlerSvc.handleError(error)
+    }
   }
 
-  navigateHome(): void {
-    this.router.navigate(['/']);
+  async navigateHome() {
+    try {
+      await this.router.navigate(['/']);
+    } catch (error) {
+      this._globalErrorHandlerSvc.handleError(error)
+    }
+
   }
 
 }

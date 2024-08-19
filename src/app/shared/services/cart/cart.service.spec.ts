@@ -44,13 +44,19 @@ describe('Service: Cart', () => {
   it('should call CartStore\'s clearCart method when CartService\'s clearCart is invoked', () => {
     mockCartStore.products.and.returnValue([]);
     cartService.clearCart(false);
-    expect(mockCartStore.clearCart).toHaveBeenCalledWith(false);
+    expect(mockCartStore.resetCart).toHaveBeenCalledWith(false);
   });
 
   it('should return products from CartStore when getProduct is called', () => {
     mockCartStore.products.and.returnValue(mockProducts);
     const result = cartService.getProduct();
     expect(result).toEqual(mockProducts);
+  });
+
+  it('should call CartStore\'s addProductToCart method when CartService\'s addToCart is invoked', () => {
+    const product = mockProducts[0];
+    cartService.addToCart(product);
+    expect(mockCartStore.addProductToCart).toHaveBeenCalledWith(product);
   });
 
 });

@@ -1,9 +1,9 @@
 export default class MockOrderStore {
-  clearFilter = jasmine.createSpy('clearFilter');
-  findOrderById = jasmine.createSpy('findOrderById').and.returnValue(undefined); // Pode ser ajustado conforme necessário
-  filterOrdersByState = jasmine.createSpy('filterOrdersByState');
-  removeAllOrders = jasmine.createSpy('removeAllOrders');
-  removeOrderById = jasmine.createSpy('removeOrderById');
+  updateOrderById = jasmine.createSpy('updateOrderById');
   addOrder = jasmine.createSpy('addOrder');
-  updateOrder = jasmine.createSpy('updateOrder');
+  filterOrdersByState = jasmine.createSpy('filterOrdersByState');
+  resetOrderFilter = jasmine.createSpy('resetOrderFilter');
+  deleteAllOrders = jasmine.createSpy('deleteAllOrders');
+  deleteOrderById = jasmine.createSpy('deleteOrderById');
+  getOrderById = jasmine.createSpy('getOrderById').and.returnValue(undefined); // Pode ser ajustado conforme necessário
 }

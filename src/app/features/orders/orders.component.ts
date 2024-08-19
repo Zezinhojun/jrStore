@@ -23,11 +23,11 @@ export default class OrdersComponent {
   }
 
   clearFilter() {
-    this._ordersSvc.clearFilter();
+    this._ordersSvc.resetOrderFilter();
   }
 
   clearOrders() {
-    this._ordersSvc.removeAllOrders()
+    this._ordersSvc.deleteAllOrders()
   }
 
   onCloseOrder(): void {
@@ -39,7 +39,7 @@ export default class OrdersComponent {
   }
 
   removeOneOrder(id: string) {
-    this._ordersSvc.removeOrderById(id)
+    this._ordersSvc.deleteOrderById(id)
   }
 
   onGoToCheckout(id: string) {

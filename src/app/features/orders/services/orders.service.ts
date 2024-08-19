@@ -1,6 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { IOrder } from '@shared/models/orders-interface';
-import GlobalErrorHandler from '@shared/services/globalErrorHandling/globalErrorHandler.service';
 import { NavigationService } from '@shared/services/navigation/navigation.service';
 import { OrderService } from '@shared/services/order/order.service';
 import { Status } from '@shared/utils/order-status';
@@ -16,24 +15,24 @@ export class OrdersService {
   private readonly _navigationSvc = inject(NavigationService)
   private readonly _orderSvc = inject(OrderService)
 
-  clearFilter(): void {
-    this._orderSvc.clearFilter();
+  resetOrderFilter(): void {
+    this._orderSvc.resetOrderFilter();
   }
 
-  findOrderById(id: string): IOrder | undefined {
-    return this._orderSvc.findOrderById(id);
+  getOrderById(id: string): IOrder | undefined {
+    return this._orderSvc.getOrderById(id);
   }
 
   filterOrdersByState(state: string): void {
     this._orderSvc.filterOrdersByState(state);
   }
 
-  removeAllOrders(): void {
-    this._orderSvc.removeAllOrders();
+  deleteAllOrders(): void {
+    this._orderSvc.deleteAllOrders();
   }
 
-  removeOrderById(id: string): void {
-    this._orderSvc.removeOrderById(id);
+  deleteOrderById(id: string): void {
+    this._orderSvc.deleteOrderById(id);
   }
 
   closeOrder(): void {
@@ -55,9 +54,9 @@ export class OrdersService {
     }
   }
 
-  updateOrder(order: IOrder, state?: string): void {
+  updateOrderById(order: IOrder, state?: string): void {
     if (this._cartSvc.hasProduct()) {
-      this._orderSvc.updateOrder(order, this._cartSvc.getProduct(), state)
+      this._orderSvc.updateOrderById(order, this._cartSvc.getProduct(), state)
       this._cartSvc.clearCart(false)
       this.resetOrderId()
       this._navigationSvc.navigateToOrders()

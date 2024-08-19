@@ -29,14 +29,14 @@ export class CheckoutService implements OnInit {
   }
 
   updateOrder(orderId: string, state?: string) {
-    const order = this._ordersSvc.findOrderById(orderId)
+    const order = this._ordersSvc.getOrderById(orderId)
     if (order) {
-      this._ordersSvc.updateOrder(order, state)
+      this._ordersSvc.updateOrderById(order, state)
     }
   }
 
   populateCartFromOrder(id: string): void {
-    const order = this._ordersSvc.findOrderById(id)
+    const order = this._ordersSvc.getOrderById(id)
     if (order) {
       this._cartSvc.clearCart(false)
       order.items.forEach((item: IProduct) => {
@@ -94,20 +94,20 @@ export class CheckoutService implements OnInit {
   }
 
   removeOrderIfCartIsEmpty(id: string) {
-    const updatedOrder = this._ordersSvc.findOrderById(id)
+    const updatedOrder = this._ordersSvc.getOrderById(id)
     if (updatedOrder) {
-      this._ordersSvc.updateOrder(updatedOrder)
+      this._ordersSvc.updateOrderById(updatedOrder)
     }
   }
 
   removeOrderIfEmpty() {
     if (this.order && this._cartSvc.products().length === 0) {
-      this._ordersSvc.removeOrderById(this.order.id);
+      this._ordersSvc.deleteOrderById(this.order.id);
     }
   }
 
   deleteOrderById(id: string) {
-    this._ordersSvc.removeOrderById(id)
+    this._ordersSvc.deleteOrderById(id)
   }
 
   retrieveCurrentOrderId(): string | undefined {
