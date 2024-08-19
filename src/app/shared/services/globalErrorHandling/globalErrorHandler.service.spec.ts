@@ -1,16 +1,17 @@
-/* tslint:disable:no-unused-variable */
 
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import GlobalErrorHandlingService from './globalErrorHandler.service';
 
 describe('Service: GlobalErrorHandling', () => {
+  let globalErrorHandler: GlobalErrorHandlingService
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [GlobalErrorHandlingService]
     });
+    globalErrorHandler = TestBed.inject(GlobalErrorHandlingService);
   });
 
-  it('should ...', inject([GlobalErrorHandlingService], (service: GlobalErrorHandlingService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should create an instance of GlobalErrorHandlerService', () => {
+    expect(globalErrorHandler).toBeTruthy();
+  });
 });
