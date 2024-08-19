@@ -20,22 +20,22 @@ export class CartService {
   }
 
   clearCart(notification: boolean): void {
-    this.cartStore.clearCart(notification);
+    this.cartStore.resetCart(notification);
   }
 
   addToCart(product: IProduct): void {
-    this.cartStore.addToCart(product);
+    this.cartStore.addProductToCart(product);
   }
 
   removeFromCart(id: number): void {
-    this.cartStore.removeFromCart(id);
+    this.cartStore.removeProductFromCart(id);
   }
 
   decrementProductQuantity(id: number): void {
-    this.cartStore.removeOneItemFromCart(id);
+    this.cartStore.decrementProductQuantity(id);
   }
 
-  getFullState() {
+  get FullState() {
     return {
       products: this.products(),
       totalAmount: this.totalAmount(),

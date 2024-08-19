@@ -1,6 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { OrderStore } from '@shared/store/order.store';
 
 import { OrdersService } from './services/orders.service';
 
@@ -14,7 +13,10 @@ import { OrdersService } from './services/orders.service';
 
 export default class OrdersComponent {
   private readonly _ordersSvc = inject(OrdersService)
-  public orderStore = inject(OrderStore)
+  public readonly orders = this._ordersSvc.getOrders();
+  public readonly totalAmount = this._ordersSvc.getTotalAmount();
+  public readonly ordersCount = this._ordersSvc.getOrdersCount();
+  public readonly filteredOrders = this._ordersSvc.getFilteredOrders();
 
   applyFilter(state: string) {
     this._ordersSvc.filterOrdersByState(state);

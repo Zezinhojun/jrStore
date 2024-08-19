@@ -4,7 +4,7 @@ import MockNavigationService from "app/__tests__/__mocks__/mockNavigationService
 import MockCartService from "app/__tests__/__mocks__/mockCartService";
 import MockOrderStore from "app/__tests__/__mocks__/mockOrderStore";
 import { OrderStore } from "@shared/store/order.store";
-import { CartService } from "./cart/cart.service";
+import { CartService } from "../../../shared/services/cart/cart.service";
 import { NavigationService } from "@shared/services/navigation/navigation.service";
 import { Status } from "@shared/utils/order-status";
 import { mockOrder } from "app/__tests__/__mocks__/mockOrder";

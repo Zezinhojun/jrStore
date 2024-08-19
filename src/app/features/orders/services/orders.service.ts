@@ -1,10 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { IOrder } from '@shared/models/orders-interface';
-import { OrderStore } from '@shared/store/order.store';
-import { Status } from '@shared/utils/order-status';
-import { CartService } from './cart/cart.service';
-import { NavigationService } from '@shared/services/navigation/navigation.service';
 import GlobalErrorHandler from '@shared/services/globalErrorHandling/globalErrorHandler.service';
+import { NavigationService } from '@shared/services/navigation/navigation.service';
+import { OrderService } from '@shared/services/order/order.service';
+import { Status } from '@shared/utils/order-status';
+
+import { CartService } from '../../../shared/services/cart/cart.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -13,136 +14,89 @@ export class OrdersService {
 
   private readonly _cartSvc = inject(CartService)
   private readonly _navigationSvc = inject(NavigationService)
-  private readonly orderStore = inject(OrderStore)
-  private readonly _globalErrorHandler = inject(GlobalErrorHandler)
+  private readonly _orderSvc = inject(OrderService)
 
   clearFilter(): void {
-    try {
-      this.orderStore.clearFilter();
-    } catch (error) {
-      this._globalErrorHandler.handleError(error)
-    }
+    this._orderSvc.clearFilter();
   }
 
   findOrderById(id: string): IOrder | undefined {
-    try {
-      return this.orderStore.findOrderById(id);
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-      return undefined
-    }
+    return this._orderSvc.findOrderById(id);
   }
 
   filterOrdersByState(state: string): void {
-    try {
-      this.orderStore.filterOrdersByState(state);
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
+    this._orderSvc.filterOrdersByState(state);
   }
 
   removeAllOrders(): void {
-    try {
-      this.orderStore.removeAllOrders();
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
+    this._orderSvc.removeAllOrders();
   }
 
   removeOrderById(id: string): void {
-    try {
-      this.orderStore.removeOrderById(id);
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
+    this._orderSvc.removeOrderById(id);
   }
 
   closeOrder(): void {
-    try {
-      if (!this._cartSvc.hasProduct()) {
-        console.log("Carrinho está vazio");
-        return;
-      }
-      this.orderStore.addOrder(this._cartSvc.getProduct(), Status.CLOSED);
-      this._cartSvc.clearCart(false);
-      this.resetOrderId();
-      this._navigationSvc.navigateToOrders();
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
+    if (!this._cartSvc.hasProduct()) {
+      console.log("Carrinho está vazio");
+      return;
     }
+    this._orderSvc.addOrder(this._cartSvc.getProduct(), Status.CLOSED);
+    this._cartSvc.clearCart(false);
+    this.resetOrderId();
+    this._navigationSvc.navigateToOrders();
   }
 
   saveOrderAsPending(): void {
-    try {
-      if (this._cartSvc.hasProduct()) {
-        this.orderStore.addOrder(this._cartSvc.getProduct(), Status.PENDING)
-        this._cartSvc.clearCart(false)
-        this.resetOrderId()
-      }
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
+    if (this._cartSvc.hasProduct()) {
+      this._orderSvc.addOrder(this._cartSvc.getProduct(), Status.PENDING)
+      this._cartSvc.clearCart(false)
+      this.resetOrderId()
     }
-
   }
 
   updateOrder(order: IOrder, state?: string): void {
-    try {
-      if (this._cartSvc.hasProduct()) {
-        this.orderStore.updateOrder(order, this._cartSvc.getProduct(), state)
-        this._cartSvc.clearCart(false)
-        this.resetOrderId()
-        this._navigationSvc.navigateToOrders()
-      }
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
+    if (this._cartSvc.hasProduct()) {
+      this._orderSvc.updateOrder(order, this._cartSvc.getProduct(), state)
+      this._cartSvc.clearCart(false)
+      this.resetOrderId()
+      this._navigationSvc.navigateToOrders()
     }
 
   }
 
   storeOrderId(id: string): void {
-    try {
-      this.orderId.set(id)
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
-
+    this.orderId.set(id)
   }
 
   retrieveOrderId(): string | undefined {
-    try {
-      return this.orderId()
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-      return undefined
-    }
+    return this.orderId()
   }
 
   resetOrderId(): void {
-    try {
-      this.orderId.set("")
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
-
+    this.orderId.set("")
   }
 
   continueShopping(): void {
-    try {
-      this.resetOrderId()
-      this._navigationSvc.navigateHome()
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
-
+    this.resetOrderId()
+    this._navigationSvc.navigateHome()
   }
 
   goToCheckout(id: string): void {
-    try {
-
-      this._navigationSvc.navigateToCheckout(id);
-    } catch (error) {
-      this._globalErrorHandler.handleError(error);
-    }
-
+    this._navigationSvc.navigateToCheckout(id);
   }
+
+  getOrders() {
+    return this._orderSvc.orders();
+  }
+  getTotalAmount() {
+    return this._orderSvc.totalAmount();
+  }
+  getOrdersCount() {
+    return this._orderSvc.ordersCount();
+  }
+  getFilteredOrders() {
+    return this._orderSvc.filteredOrders();
+  }
+
 }

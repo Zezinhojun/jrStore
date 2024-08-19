@@ -1,9 +1,11 @@
-import { computed, inject } from "@angular/core";
-import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
-import { ICartStore } from "@shared/models/cartStore-interface";
-import { IProduct } from "@shared/models/products-interface";
-import { ToastMessage } from "@shared/utils/toast-message";
-import { ToastrService } from "ngx-toastr";
+import { computed, inject } from '@angular/core';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { ICartStore } from '@shared/models/cartStore-interface';
+import { IProduct } from '@shared/models/products-interface';
+import { ToastMessage } from '@shared/utils/toast-message';
+import { ToastrService } from 'ngx-toastr';
+
+import * as cartUtils from './../utils/shopping-cart-utils';
 
 const initialState: ICartStore = {
   products: [],
@@ -15,61 +17,54 @@ export const CartStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed(({ products }) => ({
-    productsCount: computed(() => calculateProductCount(products())),
-    totalAmount: computed(() => calculateTotalAmount(products()))
+    productsCount: computed(() => cartUtils.calculateProductCount(products())),
+    totalAmount: computed(() => cartUtils.calculateTotalAmount(products()))
   })),
 
   withMethods(({ products, ...store }, toastSvc = inject(ToastrService)) => ({
-    setCart(id: string, data: ICartStore) {
+    updateCart(id: string, data: ICartStore) {
       patchState(store, { [id]: data })
     },
-    addToCart(product: IProduct) {
-      const isProductInCart = products().find((item: IProduct) => item.id === product.id)
-      if (isProductInCart) {
-        isProductInCart.qty++
-        isProductInCart.subTotal = isProductInCart.qty * isProductInCart.price
-        patchState(store, { products: [...products()] })
-      } else {
+
+    addProductToCart(product: IProduct) {
+      const existingProduct = products().find((item: IProduct) => item.id === product.id)
+      if (!existingProduct) {
         patchState(store, { products: [...products(), product] })
+      } else {
+        existingProduct.qty++
+        existingProduct.subTotal = existingProduct.qty * existingProduct.price
+        patchState(store, { products: [...products()] })
       }
       toastSvc.success(ToastMessage.ADD_ITEM)
     },
 
-    removeFromCart(id: number) {
+    removeProductFromCart(id: number) {
       const updateProducts = products().filter(product => product.id !== id)
       patchState(store, { products: updateProducts })
       toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
 
-    removeOneItemFromCart(id: number) {
-      const currentProducts = products();
-      const updatedProducts = currentProducts.map(product => {
+    decrementProductQuantity(id: number) {
+      const updatedProducts = products().reduce((acc, product) => {
         if (product.id === id) {
-          const newQuantity = product.qty - 1;
-          return { ...product, qty: newQuantity };
+          if (product.qty > 1) {
+            acc.push({ ...product, qty: product.qty - 1 });
+          }
+          return acc;
         }
-        return product;
-      })
-        .filter(product => product.qty > 0);
+        acc.push(product);
+        return acc;
+      }, [] as IProduct[]);
+
       patchState(store, { products: updatedProducts });
-      if (currentProducts
-        .find(product => product.id === id && product.qty <= 0)) {
-        this.removeFromCart(id);
-      }
       products().length !== 0 ? toastSvc.info(ToastMessage.REMOVE_ONE)
         : toastSvc.info(ToastMessage.REMOVE_ITEM)
     },
 
-    clearCart(finished: boolean) {
+    resetCart(finished: boolean) {
       patchState(store, initialState)
       if (finished) toastSvc.info(ToastMessage.CART_CLEAN)
     }
   }))
 )
 
-function calculateTotalAmount(products: IProduct[]): number {
-  return products.reduce((acc, product) => acc + product.price * product.qty, 0)
-}
-function calculateProductCount(products: IProduct[]): number {
-  return products.reduce((acc, product) => acc + product.qty, 0)
-}

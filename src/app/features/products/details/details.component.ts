@@ -58,7 +58,7 @@ export default class DetailsComponent implements OnInit {
   }
   onAddToCart() {
     const productWithQty = { ...this.product(), qty: 1 };
-    this.cartStore.addToCart(productWithQty as IProduct)
+    this.cartStore.addProductToCart(productWithQty as IProduct)
   }
 
   generateSVG(index: number): SafeHtml {

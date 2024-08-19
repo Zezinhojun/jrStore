@@ -28,6 +28,6 @@ export default class ProductsComponent {
   products = this.productSvc.products
   cartStore = inject(CartStore)
   onAddToCart(product: IProduct): void {
-    this.cartStore.addToCart(product)
+    this.cartStore.addProductToCart(product)
   }
 }
