@@ -26,7 +26,7 @@ export const OrderStore = signalStore(
   })),
 
   withMethods(({ orders, ...store }, _toastSvc = inject(ToastrService)) => ({
-    updateOrder(order: IOrder, items: IProduct[], state?: string) {
+    updateOrderById(order: IOrder, items: IProduct[], state?: string) {
       const status = state ?? Status.PENDING
       const existingOrder = orders().find(o => o.id === order.id);
       if (existingOrder) {
@@ -36,7 +36,7 @@ export const OrderStore = signalStore(
         existingOrder.ordersCount = orderUtils.calculateOrderCountForOrder(existingOrder);
 
         if (existingOrder.ordersCount <= 0) {
-          this.removeOrderById(order.id)
+          this.deleteOrderById(order.id)
           _toastSvc.info(ToastMessage.REMOVE_ORDER);
         } else {
           const updatedOrders = orders().map(o => o.id === order.id ? existingOrder : o);
@@ -60,7 +60,7 @@ export const OrderStore = signalStore(
       _toastSvc.success(ToastMessage.ADD_ORDER)
     },
 
-    filterOrdersByState: (state: string): void => {
+    filterOrders: (state: string): void => {
       if (state === Status.PENDING) {
         state = Status.PENDING;
       } else {
@@ -69,23 +69,23 @@ export const OrderStore = signalStore(
       patchState(store, { filteredOrders: filtered } as Partial<IOrderStore>)
     },
 
-    clearFilter: (): void => {
+    resetOrderFilter: (): void => {
       patchState(store, { filteredOrders: orders() } as Partial<IOrderStore>);
     },
 
-    removeAllOrders: (): void => {
+    deleteAllOrders: (): void => {
       patchState(store, { orders: [], filteredOrders: [] } as Partial<IOrderStore>);
       _toastSvc.info(ToastMessage.ORDERS_CLEAN)
     },
 
-    removeOrderById(id: string) {
+    deleteOrderById(id: string) {
       const currentOrders = orders();
       const updatedOrders = currentOrders.filter(order => order.id !== id);
       patchState(store, { orders: updatedOrders, filteredOrders: updatedOrders } as Partial<IOrderStore>);
       _toastSvc.info(ToastMessage.REMOVE_ORDER);
     },
 
-    findOrderById: (id: string): IOrder | undefined => {
+    getOrderById: (id: string): IOrder | undefined => {
       const currentOrder = orders()
       return currentOrder.find(order => order.id === id)
     }

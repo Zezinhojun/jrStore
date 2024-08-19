@@ -25,7 +25,7 @@ export class OrderService {
 
   updateOrder(order: IOrder, items: IProduct[], state?: string): void {
     try {
-      this.OrderStore.updateOrder(order, items, state);
+      this.OrderStore.updateOrderById(order, items, state);
     } catch (error) {
       this._globalErrorHandler.handleError(error);
     }
@@ -33,7 +33,7 @@ export class OrderService {
 
   filterOrdersByState(state: string): void {
     try {
-      this.OrderStore.filterOrdersByState(state);
+      this.OrderStore.filterOrders(state);
     } catch (error) {
       this._globalErrorHandler.handleError(error);
     }
@@ -41,7 +41,7 @@ export class OrderService {
 
   clearFilter(): void {
     try {
-      this.OrderStore.clearFilter();
+      this.OrderStore.resetOrderFilter();
     } catch (error) {
       this._globalErrorHandler.handleError(error);
     }
@@ -49,7 +49,7 @@ export class OrderService {
 
   removeAllOrders(): void {
     try {
-      this.OrderStore.removeAllOrders();
+      this.OrderStore.deleteAllOrders();
     } catch (error) {
       this._globalErrorHandler.handleError(error);
     }
@@ -57,7 +57,7 @@ export class OrderService {
 
   removeOrderById(id: string): void {
     try {
-      this.OrderStore.removeOrderById(id);
+      this.OrderStore.deleteOrderById(id);
     } catch (error) {
       this._globalErrorHandler.handleError(error);
     }
@@ -65,7 +65,7 @@ export class OrderService {
 
   findOrderById(id: string): IOrder | undefined {
     try {
-      return this.OrderStore.findOrderById(id);
+      return this.OrderStore.getOrderById(id);
     } catch (error) {
       this._globalErrorHandler.handleError(error);
       return undefined;
