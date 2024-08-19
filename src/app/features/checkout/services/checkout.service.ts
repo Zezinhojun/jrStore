@@ -16,6 +16,7 @@ export class CheckoutService implements OnInit {
   private readonly route = inject(ActivatedRoute);
   order: IOrder | null = null;
 
+
   ngOnInit(): void {
     this.initializeOrderFromRoute()
   }
@@ -57,7 +58,6 @@ export class CheckoutService implements OnInit {
     } else {
       this._ordersSvc.saveOrderAsPending()
       this._navigationSvc.navigateToOrders()
-      this.removeOrderIfEmpty();
       this.resetCurrentOrderId()
     }
     this.clearCartContents(false)
@@ -82,7 +82,6 @@ export class CheckoutService implements OnInit {
 
   completeOrderProcessing(): any {
     this._ordersSvc.closeOrder()
-    this.removeOrderIfEmpty();
   }
 
   removeProductFromCart(id: number) {
@@ -100,11 +99,6 @@ export class CheckoutService implements OnInit {
     }
   }
 
-  removeOrderIfEmpty() {
-    if (this.order && this._cartSvc.products().length === 0) {
-      this._ordersSvc.deleteOrderById(this.order.id);
-    }
-  }
 
   deleteOrderById(id: string) {
     this._ordersSvc.deleteOrderById(id)
