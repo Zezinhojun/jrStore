@@ -10,7 +10,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
   standalone: true,
   imports: [CurrencyPipe, SlicePipe, RouterLink],
   template: `
-<div class="group relative p-2 m-6 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-96 flex flex-col">
+<div class="group relative p-2 mt-8 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-96 flex flex-col">
   <button (click)="toggleHeart($event)"
           class="absolute top-2 right-2 z-20 p-2 bg-gray-200 rounded-full focus:outline-none">
     <img [src]="isHeartFilled ? '../../../assets/svgs/heart-filled.svg' : '../../../assets/svgs/heart.svg'"

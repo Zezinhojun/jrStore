@@ -6,11 +6,11 @@
       <a routerLink="/products" class="mr-6 text-xl text-gray-200">Products</a>
       <div class="flex justify-between" (mouseenter)="showCart.set(true)" (mouseleave)="showCart.set(false)">
         <a routerLink="/checkout" class="text-gray-200">
+
           <span class="flex items-center gap-2 right-0 ml-auto text-lg font-bold -top-1 text-gray-200">
-            <svg class=" h-6 w-6 text-gray-200"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-          </svg>
-          {{cartStore.productsCount()}}</span>
+            {{cartStore.productsCount()}}
+            <img src="../../../assets/svgs/cart.svg" alt="Cart" class="w-6 h-6 hover:opacity-80" />
+          </span>
         </a>
         @if (showCart() && cartStore.productsCount()) {
         <div [ngClass]="{'show-cart-animation':showCart()}"
@@ -32,7 +32,3 @@
     </div>
   </div>
 </nav>
-
-
-
-
