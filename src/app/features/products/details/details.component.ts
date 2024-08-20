@@ -1,6 +1,7 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { Component, OnInit, Signal, inject, input } from '@angular/core';
 import { ProductsService } from '@api/products.service';
+import { AddToCartButtonComponent } from '@shared/components/add-to-cart-button.component';
 import { RatingStarsComponent } from '@shared/components/rating-stars.component';
 import { IProduct } from '@shared/models/products-interface';
 import { CartService } from '@shared/services/cart/cart.service';
@@ -8,7 +9,7 @@ import { CartService } from '@shared/services/cart/cart.service';
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CurrencyPipe, SlicePipe, RatingStarsComponent],
+  imports: [CurrencyPipe, SlicePipe, RatingStarsComponent, AddToCartButtonComponent],
   template: `
 <section class="overflow-hidden text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
@@ -24,10 +25,9 @@ import { CartService } from '@shared/services/cart/cart.service';
         <div class="flex flex-col gap-64">
           <div class="flex flex-col gap-7">
             <span class="text-3xl font-bold text-green-950">{{product()?.price | currency:'BRL':'symbol'}}</span>
-            <button (click)="onAddToCart()"
-              class="w-32 text-sm py-2 px-4 rounded-full border text-green-950 border-black green-black bg-slate-100 hover:bg-green-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-950 focus:ring-opacity-50">
-              Add to cart
-            </button>
+            @if(product()){
+              <app-add-to-cart-button [product]="product()" (addToCartEvent)="onAddToCart($event)"></app-add-to-cart-button>
+            }
           </div>
           <div class="flex flex-col gap-4">
             <div>
@@ -71,8 +71,8 @@ export default class DetailsComponent implements OnInit {
   ngOnInit(): void {
     this.product = this._productsSvc.getProductsById(this.productId())
   }
-  onAddToCart() {
-    const productWithQty = { ...this.product(), qty: 1 };
-    this._cartService.addToCart(productWithQty as IProduct)
+
+  onAddToCart(product: IProduct): void {
+    this._cartService.addToCart(product);
   }
 }

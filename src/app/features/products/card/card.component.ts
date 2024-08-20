@@ -1,13 +1,14 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AddToCartButtonComponent } from '@shared/components/add-to-cart-button.component';
 import { RatingStarsComponent } from '@shared/components/rating-stars.component';
 import { IProduct } from '@shared/models/products-interface';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [CurrencyPipe, SlicePipe, RouterLink, RatingStarsComponent],
+  imports: [CurrencyPipe, SlicePipe, RouterLink, RatingStarsComponent, AddToCartButtonComponent],
   template: `
 <div class="group relative p-2 mt-8 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-120 flex flex-col">
   <button (click)="toggleHeart($event)"
@@ -37,10 +38,7 @@ import { IProduct } from '@shared/models/products-interface';
     <div class="flex mb-2">
     <app-rating-stars [ratingRate]="product.rating.rate" [ratingCount]="product.rating.count"></app-rating-stars>
     </div>
-    <button (click)="onAddToCart()"
-            class="w-32 text-sm py-2 px-4 rounded-full border border-black text-black bg-slate-100 hover:bg-green-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-opacity-50">
-      Add to cart
-    </button>
+    <app-add-to-cart-button [product]="product" (addToCartEvent)="onAddToCart($event)"></app-add-to-cart-button>
   </div>
 </div>
 `
@@ -51,9 +49,8 @@ export class CardComponent {
   @Input() product!: IProduct;
 
 
-  onAddToCart(): void {
-    const productWithQty = { ...this.product, qty: 1 };
-    this.addToCartEvent.emit(productWithQty);
+  onAddToCart(product: IProduct): void {
+    this.addToCartEvent.emit(product);
   }
 
   toggleHeart(event: Event): void {
