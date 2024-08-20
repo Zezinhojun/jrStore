@@ -8,14 +8,14 @@
         <a routerLink="/checkout" class="text-gray-200">
 
           <span class="flex items-center gap-2 right-0 ml-auto text-lg font-bold -top-1 text-gray-200">
-            {{cartStore.productsCount()}}
+            {{productsCount()}}
             <img src="../../../assets/svgs/cart.svg" alt="Cart" class="w-6 h-6 hover:opacity-80" />
           </span>
         </a>
-        @if (showCart() && cartStore.productsCount()) {
+        @if (showCart() && productsCount()) {
         <div [ngClass]="{'show-cart-animation':showCart()}"
           class="absolute right-0 z-30 w-48 p-2 mt-2 text-white rounded-sm bg-slate-400">
-          @for (product of cartStore.products(); track $index) {
+          @for (product of products(); track $index) {
           <div class="flex items-center justify-between">
             <span>{{product.qty}} {{product.title | slice: 0:10}} {{product.subTotal || product.price |
               currency}}</span>
@@ -24,7 +24,7 @@
           <hr class="my-4 border-gray-500 border-t-1">
           <div class="flex items-center justify-betwwen font-light">
             Total:
-            <span class="not-italic font-bold">{{cartStore.totalAmount() | currency}}</span>
+            <span class="not-italic font-bold">{{totalAmount() | currency}}</span>
           </div>
         </div>
         }

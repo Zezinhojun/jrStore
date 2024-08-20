@@ -19,7 +19,10 @@ module.exports = {
       fontSize: {
         'tiny': '0.65rem',
         'huge': '10rem',
-      }
+      },
+      height: {
+        '120': '30rem',
+      },
     },
   },
   plugins: [],

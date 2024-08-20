@@ -1,24 +1,32 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CardComponent } from "./card/card.component";
 import { ProductsService } from '@api/products.service';
 import { IProduct } from '@shared/models/products-interface';
-import { CartStore } from '@shared/store/shopping-cart.store';
+import { CartService } from '@shared/services/cart/cart.service';
 
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [CardComponent],
   template: `
-<div class="flex justify-between container mx-auto bg-primary p-12 mt-2">
-  <div class="flex flex-col justify-start">
-    <h1 class="text-5xl text-gray-200 w-8/12">Grab upto 50% off on select Rain Jacket</h1>
-    <button
-      class="w-40 mt-10 px-4 py-3 rounded-2xl bg-primary-light text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2focus:ring-opacity-50">
+<div class="flex flex-col items-center lg:flex-row justify-between container mx-auto bg-opacity-70 bg-gray-200 p-12 mt-4">
+
+  <div class="flex flex-col justify-start gap-20 mt-16 lg:mt-0 lg:w-1/2 hidden md:block">
+    <h1 class="text-5xl text-gray-600 w-full lg:w-9/12 mb-10 " >Grab upto 50% off on select Rain Jacket</h1>
+    <button class="w-40 px-4 py-3 rounded-2xl bg-green-800 text-white hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-opacity-50">
       Buy now
     </button>
   </div>
-  <div class="flex justify-center items-center">
-    <h1 class="text-pink-500 text-5xl">IMAGEM DE CAMISA</h1>
+
+  <div class="hidden lg:flex lg:justify-center lg:items-center lg:w-1/2">
+    <img src="./../../../assets/img/rainJacke (1).png" alt="" class="w-40 h-40 sm:w-60 sm:h-60 md:w-80 md:h-80 object-contain" />
+  </div>
+
+  <div class="lg:hidden flex flex-col items-center gap-4">
+    <img src="./../../../assets/img/rainJacke (1).png" alt="" class="w-40 h-40 sm:w-60 sm:h-60 md:w-80 md:h-80 object-contain" />
+    <button class="w-40 px-4 py-3 rounded-2xl bg-green-800 text-white hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-opacity-50">
+      Buy now
+    </button>
   </div>
 </div>
 
@@ -41,11 +49,11 @@ import { CartStore } from '@shared/store/shopping-cart.store';
           </svg>
         </span>
       </button>
-      @if(isDropdownOpen){
+      @if(isDropdownOpen()){
         <ul
   class="absolute z-10 mt-1 max-h-56 w-full min-w-[200px] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
   tabindex="-1" role="listbox" aria-labelledby="listbox-label">
-  <li class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-gray-100 flex items-center justify-between"
+  <li class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
   role="option" (click)="updateSortOrder('asc')">
           <div class="flex items-center">
             <span class="ml-3 block truncate">Ascending</span>
@@ -60,7 +68,7 @@ import { CartStore } from '@shared/store/shopping-cart.store';
           </span>
           }
         </li>
-        <li class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-gray-100 flex items-center justify-between"
+        <li class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
         role="option" (click)="updateSortOrder('desc')">
           <div class="flex items-center">
             <span class="ml-3 block truncate">Descending</span>
@@ -96,22 +104,23 @@ import { CartStore } from '@shared/store/shopping-cart.store';
 })
 export default class ProductsComponent {
   private readonly _productSvc = inject(ProductsService)
-  products = this._productSvc.products
-  cartStore = inject(CartStore)
-  onAddToCart(product: IProduct): void {
-    this.cartStore.addProductToCart(product)
-  }
-  isDropdownOpen = false;
-  selectedSortOrder: 'asc' | 'desc' = 'desc';
+  private readonly _cartService = inject(CartService);
+  public products = this._productSvc.products
+  public isDropdownOpen = signal<boolean>(false);
+
+  public selectedSortOrder: 'asc' | 'desc' = 'desc';
 
   toggleDropdown() {
-    console.log(this.selectedSortOrder)
-    this.isDropdownOpen = !this.isDropdownOpen;
+    this.isDropdownOpen.set(!this.isDropdownOpen())
   }
 
   updateSortOrder(order: 'asc' | 'desc') {
     this.selectedSortOrder = order;
-    this.isDropdownOpen = false;
+    this.isDropdownOpen.set(false)
     this._productSvc.getProducts(order);
+  }
+
+  onAddToCart(product: IProduct): void {
+    this._cartService.addToCart(product)
   }
 }

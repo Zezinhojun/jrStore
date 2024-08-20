@@ -10,7 +10,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
   standalone: true,
   imports: [CurrencyPipe, SlicePipe, RouterLink],
   template: `
-<div class="group relative p-2 mt-8 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-96 flex flex-col">
+<div class="group relative p-2 mt-8 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-120 flex flex-col">
   <button (click)="toggleHeart($event)"
           class="absolute top-2 right-2 z-20 p-2 bg-gray-200 rounded-full focus:outline-none">
     <img [src]="isHeartFilled ? '../../../assets/svgs/heart-filled.svg' : '../../../assets/svgs/heart.svg'"
@@ -29,7 +29,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
         <h3 class="text-xs text-gray-700 font-bold">
           {{product.title}}
         </h3>
-        <p class="mt-2 inline-block px-2 py-1 text-xs text-gray-500 bg-purple-100 rounded-xl">
+        <p class="mt-2 inline-block px-2 py-1 text-xs text-gray-500 bg-green-50 rounded-xl">
           {{product.category}}
         </p>
       </div>
@@ -44,7 +44,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
       </span>
     </div>
     <button (click)="onAddToCart()"
-            class="w-32 text-sm py-2 px-4 rounded-full border border-black text-black bg-white hover:bg-green-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+            class="w-32 text-sm py-2 px-4 rounded-full border border-black text-black bg-slate-100 hover:bg-green-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-opacity-50">
       Add to cart
     </button>
   </div>

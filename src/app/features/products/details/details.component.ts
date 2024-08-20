@@ -16,10 +16,10 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
     <div class="flex flex-wrap mx-auto lg:w-4/5">
       <img src="{{product()?.image}}" alt="{{product()?.title}}"
         class="object-cover object-center w-full h64 rounded lg:w-1/2 lg:h-auto">
-      <div class="w-full mt-6 lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0">
-        <h2 class="text-sm tracking-widest text-gray-500 title-font">{{product()?.category}}</h2>
+      <div class="w-full mt-6 lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0 ">
         <h1 class="mb-1 text-3xl font-medium text-gray-900 title-font">{{product()?.title}}</h1>
-        <div class="flex mb-4">
+        <p class="mt-2 mb-2 leading-relaxed">{{product()?.description | slice:0:50 }}</p>
+        <div class="flex mb-4 item-center">
           <span class="flex items-center">
             @for (item of starsArray; track index; let index = $index) {
             <span [innerHTML]="generateStarSVG(index)"></span>
@@ -27,13 +27,40 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
             <span class="ml-3 text-gray-600">{{product()?.rating?.count}} reviews</span>
           </span>
         </div>
-        <p class="mt-6 mb-5 leading-relaxed">{{product()?.description | slice:0:50 }}</p>
-        <div class="flex">
-          <span class="text-2xl font-bold text-orange-500">{{product()?.price | currency:'BRL':'symbol'}}</span>
-          <button (click)="onAddToCart()"
-            class=" ml-auto px-2 py-1 text-white bg-orange-500 rounded hover:bg-orange-700">
-            Add to cart
-          </button>
+        <div class="flex flex-col gap-64">
+          <div class="flex flex-col gap-7">
+            <span class="text-3xl font-bold text-green-950">{{product()?.price | currency:'BRL':'symbol'}}</span>
+            <button (click)="onAddToCart()"
+              class="w-32 text-sm py-2 px-4 rounded-full border text-green-950 border-black green-black bg-slate-100 hover:bg-green-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-950 focus:ring-opacity-50">
+              Add to cart
+            </button>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div>
+              <div class="flex items-center justify-start gap-3">
+                <img src="../../../assets/svgs/delivery-truck.svg" alt="Filter Pending"
+                  class="w-6 h-6 hover:opacity-80" />
+                <h3 class="text-xl text-extrabold">Free delivery</h3>
+              </div>
+              <a href="#" class="text-gray-400 underline hover:text-green-800 cursor-pointer"
+                onclick="event.preventDefault();">
+                Enter your postal code for delivery availability
+              </a>
+            </div>
+            <div>
+              <div class="flex items-center justify-start gap-3">
+                <img src="../../../assets/svgs/inbox.svg" alt="Filter Pending"
+                  class="w-6 h-6 hover:opacity-80" />
+                <h3 class="text-xl text-extrabold">Return delivery</h3>
+              </div>
+              <p> Free 30 days delivery Returns.
+                <a href="#" class="text-gray-400 underline hover:text-green-800 cursor-pointer"
+                  onclick="event.preventDefault();">
+                  Details.
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
