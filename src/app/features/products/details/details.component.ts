@@ -1,15 +1,14 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { Component, OnInit, Signal, inject, input } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
 import { ProductsService } from '@api/products.service';
+import { RatingStarsComponent } from '@shared/components/rating-stars.component';
 import { IProduct } from '@shared/models/products-interface';
 import { CartService } from '@shared/services/cart/cart.service';
-import { GenerateRatingStarService } from '@shared/services/generateRatingStar/generateRatingStar.service';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CurrencyPipe, SlicePipe],
+  imports: [CurrencyPipe, SlicePipe, RatingStarsComponent],
   template: `
 <section class="overflow-hidden text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
@@ -20,12 +19,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
         <h1 class="mb-1 text-3xl font-medium text-gray-900 title-font">{{product()?.title}}</h1>
         <p class="mt-2 mb-2 leading-relaxed">{{product()?.description | slice:0:50 }}</p>
         <div class="flex mb-4 item-center">
-          <span class="flex items-center">
-            @for (item of starsArray; track index; let index = $index) {
-            <span [innerHTML]="generateStarSVG(index)"></span>
-            }
-            <span class="ml-3 text-gray-600">{{product()?.rating?.count}} reviews</span>
-          </span>
+        <app-rating-stars [ratingRate]="product()?.rating?.rate" [ratingCount]="product()?.rating?.count"></app-rating-stars>
         </div>
         <div class="flex flex-col gap-64">
           <div class="flex flex-col gap-7">
@@ -70,9 +64,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
 })
 export default class DetailsComponent implements OnInit {
   product!: Signal<IProduct | undefined>
-  starsArray: number[] = new Array(5).fill(0);
   productId = input<number>(0, { alias: 'id' })
-  private readonly _generateRatingStar = inject(GenerateRatingStarService);
   private readonly _productsSvc = inject(ProductsService)
   private readonly _cartService = inject(CartService);
 
@@ -82,14 +74,5 @@ export default class DetailsComponent implements OnInit {
   onAddToCart() {
     const productWithQty = { ...this.product(), qty: 1 };
     this._cartService.addToCart(productWithQty as IProduct)
-  }
-
-  generateStarSVG(index: number): SafeHtml {
-    const product = this.product();
-    if (product) {
-      const rate = product.rating.rate;
-      return this._generateRatingStar.generateRatingStar(index, rate);
-    }
-    return '';
   }
 }

@@ -36,7 +36,7 @@ import { CartService } from '@shared/services/cart/cart.service';
     <div class="relative mt-2">
       <button type="button"
         class=" relative w-[200px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
-        aria-haspopup="listbox" [attr.aria-expanded]="isDropdownOpen" aria-labelledby="listbox-label"
+        aria-haspopup="listbox" [attr.aria-expanded]="isDropdownOpen()" aria-labelledby="listbox-label"
         (click)="toggleDropdown()">
         <span class="flex items-center">
           <span class="ml-3 block truncate">Sort: {{ selectedSortOrder === 'asc' ? 'Ascending' : 'Descending' }}</span>

@@ -1,14 +1,13 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { RatingStarsComponent } from '@shared/components/rating-stars.component';
 import { IProduct } from '@shared/models/products-interface';
-import { GenerateRatingStarService } from '@shared/services/generateRatingStar/generateRatingStar.service';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [CurrencyPipe, SlicePipe, RouterLink],
+  imports: [CurrencyPipe, SlicePipe, RouterLink, RatingStarsComponent],
   template: `
 <div class="group relative p-2 mt-8 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-120 flex flex-col">
   <button (click)="toggleHeart($event)"
@@ -36,12 +35,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
       <p class="text-xl text-gray-900 font-bold">{{product.price | currency:'BRL':'symbol'}}</p>
     </div>
     <div class="flex mb-2">
-      <span class="flex items-center">
-        @for (item of starsArray; track index; let index = $index) {
-          <span [innerHTML]="generateStarSVG(index)"></span>
-        }
-        <span class="text-xs ml-3 text-gray-600">{{product.rating.count}} reviews</span>
-      </span>
+    <app-rating-stars [ratingRate]="product.rating.rate" [ratingCount]="product.rating.count"></app-rating-stars>
     </div>
     <button (click)="onAddToCart()"
             class="w-32 text-sm py-2 px-4 rounded-full border border-black text-black bg-slate-100 hover:bg-green-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-opacity-50">
@@ -52,8 +46,6 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
 `
 })
 export class CardComponent {
-  private readonly _generateRatingStar = inject(GenerateRatingStarService);
-  public readonly starsArray: number[] = new Array(5).fill(0);
   public isHeartFilled: boolean = false;
   @Output() addToCartEvent = new EventEmitter<IProduct>();
   @Input() product!: IProduct;
@@ -62,11 +54,6 @@ export class CardComponent {
   onAddToCart(): void {
     const productWithQty = { ...this.product, qty: 1 };
     this.addToCartEvent.emit(productWithQty);
-  }
-
-  generateStarSVG(index: number): SafeHtml {
-    const rate = this.product.rating.rate;
-    return this._generateRatingStar.generateRatingStar(index, rate);
   }
 
   toggleHeart(event: Event): void {
