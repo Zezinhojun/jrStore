@@ -20,7 +20,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
     <div class="w-full h-full bg-gray-200 hover:opacity-75 rounded-md overflow-hidden">
       <img src="{{product.image}}"
            alt="{{product.title}}"
-           class="w-full h-full object-cover object-center transition duration-500 transform hover:scale-105" />
+           class="w-full h-full  object-center transition duration-500 transform hover:scale-105" />
     </div>
   </a>
   <div class="mt-4 flex flex-col gap-2 flex-1">
@@ -33,7 +33,7 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
           {{product.category}}
         </p>
       </div>
-      <p class="text-sm text-gray-900 font-bold">{{product.price | currency:'BRL':'symbol'}}</p>
+      <p class="text-xl text-gray-900 font-bold">{{product.price | currency:'BRL':'symbol'}}</p>
     </div>
     <div class="flex mb-2">
       <span class="flex items-center">
