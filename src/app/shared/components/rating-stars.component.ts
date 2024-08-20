@@ -17,7 +17,6 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
 export class RatingStarsComponent {
   @Input() ratingRate: number | undefined;
   @Input() ratingCount: number | undefined;
-
   public readonly starsArray: number[] = new Array(5).fill(0);
   private readonly _generateRatingStar = inject(GenerateRatingStarService);
 

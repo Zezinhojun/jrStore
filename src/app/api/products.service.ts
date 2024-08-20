@@ -1,33 +1,39 @@
 import { HttpClient } from "@angular/common/http";
-import { EnvironmentInjector, Injectable, inject, runInInjectionContext, signal } from "@angular/core";
+import { Injectable, inject, signal } from "@angular/core";
 import { environment } from "@envs/environment";
 import { IProduct } from "@shared/models/products-interface";
-import { map, tap } from "rxjs";
-import { toSignal } from '@angular/core/rxjs-interop'
+
 
 @Injectable({ providedIn: "root" })
 export class ProductsService {
   public products = signal<IProduct[]>([]);
   private readonly _http = inject(HttpClient)
-  private readonly _endPoint = environment.apiURL
-  private readonly _injector = inject(EnvironmentInjector)
+  private readonly _endPoint = environment.apiURL;
 
   constructor() {
-    this.getProducts('desc')
+    this.loadProducts();
   }
 
-  public getProducts(order: 'asc' | 'desc'): void {
-    this._http.get<IProduct[]>(`${this._endPoint}/products/?sort=${order}`)
-      .pipe(
-        map((products: IProduct[]) => products
-          .map((product: IProduct) => ({ ...product, qty: 1 }))
-        ),
-        tap((products: IProduct[]) => this.products.set(products)))
-      .subscribe();
+  getProducts(): IProduct[] {
+    return this.products();
   }
 
-  public getProductsById(id: number) {
-    return runInInjectionContext(this._injector, () =>
-      toSignal<IProduct>(this._http.get<IProduct>(`${this._endPoint}/products/${id}`)))
+  getProductById(id: number): IProduct | undefined {
+    return this.products().find(product => product.id === id);
+  }
+
+  private loadProducts() {
+    this._http.get<IProduct[]>(this._endPoint).subscribe(products => {
+      this.products.set(products);
+    });
+  }
+
+  sortProducts(order: 'asc' | 'desc') {
+    const sortedProducts = [...this.products()].sort((a, b) => {
+      if (a.price < b.price) return order === 'asc' ? -1 : 1;
+      if (a.price > b.price) return order === 'asc' ? 1 : -1;
+      return 0;
+    });
+    this.products.set(sortedProducts);
   }
 }

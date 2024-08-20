@@ -3,7 +3,8 @@ import { AppComponent } from './app.component';
 import MockToastrService from './__tests__/__mocks__/mockToastrService';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
-import MockActivatedRoute from './__tests__/__mocks__/MockActivatedRoute';
+import MockActivatedRoute from './__tests__/__mocks__/mockActivatedRoute';
+
 
 describe('AppComponent', () => {
 

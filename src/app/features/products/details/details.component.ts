@@ -1,5 +1,6 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
-import { Component, OnInit, Signal, inject, input } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '@api/products.service';
 import { AddToCartButtonComponent } from '@shared/components/add-to-cart-button.component';
 import { RatingStarsComponent } from '@shared/components/rating-stars.component';
@@ -63,16 +64,28 @@ import { CartService } from '@shared/services/cart/cart.service';
 `,
 })
 export default class DetailsComponent implements OnInit {
-  product!: Signal<IProduct | undefined>
-  productId = input<number>(0, { alias: 'id' })
-  private readonly _productsSvc = inject(ProductsService)
-  private readonly _cartService = inject(CartService);
+  private productId: number = 0;
+  private readonly _productsSvc = inject(ProductsService);
+  private readonly _cartSvc = inject(CartService);
+  private route = inject(ActivatedRoute)
+  private products = signal<IProduct[]>([]);
+  readonly product = computed(() =>
+    this.products().find(product => product.id === this.productId)
+  );
 
   ngOnInit(): void {
-    this.product = this._productsSvc.getProductsById(this.productId())
+    this.route.paramMap.subscribe(params => {
+      this.productId = +params.get('id')!
+      this.loadProducts();
+    });
+  }
+
+  private loadProducts(): void {
+    const products = this._productsSvc.getProducts();
+    this.products.set(products);
   }
 
   onAddToCart(product: IProduct): void {
-    this._cartService.addToCart(product);
+    this._cartSvc.addToCart(product);
   }
 }

@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 import MockToastrService from 'app/__tests__/__mocks__/mockToastrService';
 import { ToastrService } from 'ngx-toastr';
-import MockActivatedRoute from 'app/__tests__/__mocks__/MockActivatedRoute';
 import { ActivatedRoute } from '@angular/router';
+import MockActivatedRoute from 'app/__tests__/__mocks__/mockActivatedRoute';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;

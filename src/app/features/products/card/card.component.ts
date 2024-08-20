@@ -11,7 +11,7 @@ import { IProduct } from '@shared/models/products-interface';
   imports: [CurrencyPipe, SlicePipe, RouterLink, RatingStarsComponent, AddToCartButtonComponent],
   template: `
 <div class="group relative p-2 mt-8 overflow-hidden rounded-lg shadow-lg bg-gray-200 hover:shadow-xl h-120 flex flex-col">
-  <button (click)="toggleHeart($event)"
+  <button (click)="toggleHeart()"
           class="absolute top-2 right-2 z-20 p-2 bg-gray-200 rounded-full focus:outline-none">
     <img [src]="isHeartFilled ? '../../../assets/svgs/heart-filled.svg' : '../../../assets/svgs/heart.svg'"
          alt="Heart Icon" class="w-6 h-6" />
@@ -53,7 +53,7 @@ export class CardComponent {
     this.addToCartEvent.emit(product);
   }
 
-  toggleHeart(event: Event): void {
+  toggleHeart(): void {
     this.isHeartFilled = !this.isHeartFilled;
   }
 }

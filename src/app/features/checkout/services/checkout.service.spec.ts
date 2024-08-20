@@ -2,7 +2,6 @@ import MockNavigationService from "app/__tests__/__mocks__/mockNavigationService
 import { CheckoutService } from "./checkout.service"
 import MockOrdersService from "app/__tests__/__mocks__/mockOrdersService";
 import MockCartService from "app/__tests__/__mocks__/mockCartService";
-import MockActivatedRoute from "app/__tests__/__mocks__/MockActivatedRoute";
 import { TestBed } from "@angular/core/testing";
 import { NavigationService } from "@shared/services/navigation/navigation.service";
 import { OrdersService } from "app/features/orders/services/orders.service";
@@ -11,6 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 import { mockOrder } from "app/__tests__/__mocks__/mockOrder";
 import { mockProducts } from "app/__tests__/__mocks__/mockProducts";
 import { Status } from "@shared/utils/order-status";
+import MockActivatedRoute from "app/__tests__/__mocks__/mockActivatedRoute";
 
 describe('CheckoutService', () => {
   let checkoutService: CheckoutService;

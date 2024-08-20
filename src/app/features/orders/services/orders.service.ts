@@ -10,7 +10,6 @@ import { CartService } from '../../../shared/services/cart/cart.service';
 
 export class OrdersService {
   public orderId = signal<string>("")
-
   private readonly _cartSvc = inject(CartService)
   private readonly _navigationSvc = inject(NavigationService)
   private readonly _orderSvc = inject(OrderService)
@@ -61,7 +60,6 @@ export class OrdersService {
       this.resetOrderId()
       this._navigationSvc.navigateToOrders()
     }
-
   }
 
   storeOrderId(id: string): void {
@@ -88,12 +86,15 @@ export class OrdersService {
   getOrders() {
     return this._orderSvc.orders();
   }
+
   getTotalAmount() {
     return this._orderSvc.totalAmount();
   }
+
   getOrdersCount() {
     return this._orderSvc.ordersCount();
   }
+
   getFilteredOrders() {
     return this._orderSvc.filteredOrders();
   }

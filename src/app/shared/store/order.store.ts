@@ -7,7 +7,8 @@ import { Status } from '@shared/utils/order-status';
 import { ToastMessage } from '@shared/utils/toast-message';
 import { ToastrService } from 'ngx-toastr';
 import { v4 as uuidv4 } from 'uuid';
-import * as  orderUtils from '../utils/order-utils'
+
+import * as orderUtils from '../utils/order-utils';
 
 const initialState: IOrderStore = {
   orders: [],

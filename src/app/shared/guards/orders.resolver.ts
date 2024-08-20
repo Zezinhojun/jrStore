@@ -5,7 +5,7 @@ import { CheckoutService } from 'app/features/checkout/services/checkout.service
 import { OrdersService } from 'app/features/orders/services/orders.service';
 import { of } from 'rxjs';
 
-export const ordersResolver: ResolveFn<IOrder | null> = (route, state) => {
+export const ordersResolver: ResolveFn<IOrder | null> = (route) => {
   const _ordersSvc = inject(OrdersService);
   const _checkSvc = inject(CheckoutService);
   const router = inject(Router);
