@@ -16,6 +16,10 @@ module.exports = {
         'poppins': ['Poppins', 'sans-serif'],
         'merriweather': ['Merriweather', 'serif'],
       },
+      fontSize: {
+        'tiny': '0.65rem',
+        'huge': '10rem',
+      }
     },
   },
   plugins: [],

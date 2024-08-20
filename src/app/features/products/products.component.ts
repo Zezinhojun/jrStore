@@ -9,7 +9,7 @@ import { CartStore } from '@shared/store/shopping-cart.store';
   standalone: true,
   imports: [CardComponent],
   template: `
-  <div class=" flex justify-between container mx-auto bg-primary p-12 mt-2">
+  <div class="flex justify-between container mx-auto bg-primary p-12 mt-2">
   <div class="flex flex-col justify-start">
     <h1 class="text-5xl text-gray-200 w-8/12">Grab upto 50% off on select Rain Jacket</h1>
     <button class="w-40 mt-10 px-4 py-3 rounded-2xl bg-primary-light text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2focus:ring-opacity-50">
@@ -20,6 +20,7 @@ import { CartStore } from '@shared/store/shopping-cart.store';
     <h1 class="text-pink-500 text-5xl">IMAGEM DE CAMISA</h1>
   </div>
 </div>
+
   <div class="flex container mx-auto justify-end mt-6">
   <div>
     <label id="listbox-label" class="block text-sm font-medium leading-6 text-gray-900">Sort by</label>
@@ -76,13 +77,16 @@ import { CartStore } from '@shared/store/shopping-cart.store';
     </div>
   </div>
 </div>
-  <section class="text-gray-600 body-font">
-  <div class="container px-5 py-24 mx-auto">
+<section class="text-gray-600 body-font">
+  <div class="container px-5 mx-auto">
+    <h1 class="ml-10 font-bold text-3xl">All products in SALE</h1>
     <div class="flex flex-wrap -m-4">
-    @for(product of products(); track $index){
-      <app-card (addToCartEvent)="onAddToCart($event)"
-      class="w-full p-4 lg:w-1/4 md:w-1/2"
-      [product]="product"/>
+      @for (product of products(); track $index) {
+      <app-card
+        class="w-full p-4 lg:w-1/4 md:w-1/2"
+        [product]="product"
+        (addToCartEvent)="onAddToCart($event)">
+      </app-card>
     }
     </div>
   </div>

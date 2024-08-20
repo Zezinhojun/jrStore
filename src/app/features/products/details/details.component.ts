@@ -44,8 +44,6 @@ import { CartStore } from '@shared/store/shopping-cart.store';
 })
 export default class DetailsComponent implements OnInit {
   starsArray: number[] = new Array(5).fill(0);
-
-  // @Input({ alias: 'id' }) productId!: number
   productId = input<number>(0, { alias: 'id' })
   product!: Signal<IProduct | undefined>
   cartStore = inject(CartStore)
