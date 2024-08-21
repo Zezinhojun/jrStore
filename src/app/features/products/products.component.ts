@@ -10,7 +10,7 @@ import { CardComponent } from './card/card.component';
   standalone: true,
   imports: [CardComponent],
   template: `
-@defer(when products()){
+@defer(when products().length>0){
 <div
   class="flex flex-col items-center lg:flex-row justify-between container mx-auto bg-opacity-70 bg-gray-200 p-12 mt-4">
   <div class="flex flex-col justify-start gap-20 mt-16 lg:mt-0 lg:w-1/2 hidden md:block">

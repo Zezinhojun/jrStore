@@ -1,16 +1,16 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { GenerateRatingStarService } from './generateRatingStar.service';
 
 describe('Service: GenerateRatingStar', () => {
+  let generateRatingStar: GenerateRatingStarService
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [GenerateRatingStarService]
     });
+    generateRatingStar = TestBed.inject(GenerateRatingStarService);
   });
 
-  it('should ...', inject([GenerateRatingStarService], (service: GenerateRatingStarService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should create an instance of GenerateRatingStarService', () => {
+    expect(generateRatingStar).toBeTruthy();
+  });
 });

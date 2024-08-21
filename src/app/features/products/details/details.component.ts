@@ -12,7 +12,8 @@ import { CartService } from '@shared/services/cart/cart.service';
   standalone: true,
   imports: [CurrencyPipe, SlicePipe, RatingStarsComponent, AddToCartButtonComponent],
   template: `
-<section class="overflow-hidden text-gray-600 body-font">
+  @defer(when products().length >0){
+    <section class="overflow-hidden text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
     <div class="flex justify-evenly flex-wrap mx-auto lg:w-4/5">
       <img src="{{product()?.image}}" alt="{{product()?.title}}"
@@ -61,6 +62,7 @@ import { CartService } from '@shared/services/cart/cart.service';
     </div>
   </div>
 </section>
+  }
 `,
 })
 export default class DetailsComponent implements OnInit {
@@ -68,8 +70,8 @@ export default class DetailsComponent implements OnInit {
   private readonly _productsSvc = inject(ProductsService);
   private readonly _cartSvc = inject(CartService);
   private route = inject(ActivatedRoute)
-  private products = signal<IProduct[]>([]);
-  readonly product = computed(() =>
+  public products = this._productsSvc.products;
+  public product = computed(() =>
     this.products().find(product => product.id === this.productId)
   );
 
@@ -81,8 +83,12 @@ export default class DetailsComponent implements OnInit {
   }
 
   private loadProducts(): void {
-    const products = this._productsSvc.getProducts();
-    this.products.set(products);
+    if (this.product()) {
+      const products = this._productsSvc.getProducts();
+      this.products.set(products);
+    } else {
+      this._productsSvc.getProducts()
+    }
   }
 
   onAddToCart(product: IProduct): void {
