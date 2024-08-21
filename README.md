@@ -76,12 +76,6 @@ To run unit tests, use:
 npm test
 ```
 
-For end-to-end testing, execute:
-
-```bash
-ng e2e
-```
-
 ## Contributing
 
 Contributions are welcome! Please feel free to open issues or submit pull requests to help improve the project.
