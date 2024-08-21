@@ -14,6 +14,10 @@ export class OrdersService {
   private readonly _navigationSvc = inject(NavigationService)
   private readonly _orderSvc = inject(OrderService)
 
+  clearCart() {
+    this._cartSvc.clearCart(false)
+  }
+
   resetOrderFilter(): void {
     this._orderSvc.resetOrderFilter();
   }
