@@ -1,5 +1,5 @@
 import { CurrencyPipe, NgClass, SlicePipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartService } from '@shared/services/cart/cart.service';
 

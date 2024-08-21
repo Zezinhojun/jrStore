@@ -1,5 +1,5 @@
 import { CurrencyPipe, SlicePipe } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '@api/products.service';
 import { AddToCartButtonComponent } from '@shared/components/add-to-cart-button.component';
@@ -69,7 +69,7 @@ export default class DetailsComponent implements OnInit {
   private productId: number = 0;
   private readonly _productsSvc = inject(ProductsService);
   private readonly _cartSvc = inject(CartService);
-  private route = inject(ActivatedRoute)
+  private readonly route = inject(ActivatedRoute)
   public products = this._productsSvc.products;
   public product = computed(() =>
     this.products().find(product => product.id === this.productId)

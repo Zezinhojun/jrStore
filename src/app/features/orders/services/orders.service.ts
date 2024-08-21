@@ -35,10 +35,6 @@ export class OrdersService {
   }
 
   closeOrder(): void {
-    if (!this._cartSvc.hasProduct()) {
-      console.log("Carrinho está vazio");
-      return;
-    }
     this._orderSvc.addOrder(this._cartSvc.getProduct(), Status.CLOSED);
     this._cartSvc.clearCart(false);
     this.resetOrderId();
