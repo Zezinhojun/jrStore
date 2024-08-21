@@ -9,11 +9,10 @@ import { IProduct } from '@shared/models/products-interface';
   standalone: true,
   imports: [CurrencyPipe],
   templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.scss'
+  styleUrl: './checkout.component.scss',
 })
-
 export default class CheckoutComponent {
-  private readonly _checkoutSvc = inject(CheckoutService)
+  private readonly _checkoutSvc = inject(CheckoutService);
   public cartProducts = this._checkoutSvc.getCartProducts();
   public cartTotalAmount = this._checkoutSvc.getCartTotalAmount();
   public cartProductsCount = this._checkoutSvc.getCartProductsCount();
@@ -23,7 +22,7 @@ export default class CheckoutComponent {
   }
 
   onContinue() {
-    this._checkoutSvc.navigateToHomePage()
+    this._checkoutSvc.navigateToHomePage();
   }
 
   onCloseOrder(): void {
@@ -31,17 +30,17 @@ export default class CheckoutComponent {
   }
 
   onSaveOrderAsPending() {
-    this._checkoutSvc.saveOrderAsPending()
+    this._checkoutSvc.saveOrderAsPending();
   }
 
   removeItem(id: number): void {
-    this._checkoutSvc.removeProductFromCart(id)
+    this._checkoutSvc.removeProductFromCart(id);
   }
 
   removeOneItem(id: number): void {
-    this._checkoutSvc.decrementProductQuantity(id)
+    this._checkoutSvc.decrementProductQuantity(id);
   }
   addToCart(product: IProduct): void {
-    this._checkoutSvc.addToCart(product)
+    this._checkoutSvc.addToCart(product);
   }
 }

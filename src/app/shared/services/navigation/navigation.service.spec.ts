@@ -3,17 +3,14 @@ import { NavigationService } from './navigation.service';
 import { Router } from '@angular/router';
 import MockRouter from 'app/__tests__/__mocks__/mockRouter';
 
-
 describe('Service: Navigation', () => {
-  let navigationService: NavigationService
+  let navigationService: NavigationService;
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
     mockRouter = new MockRouter().router as jasmine.SpyObj<Router>;
     TestBed.configureTestingModule({
-      providers: [NavigationService,
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers: [NavigationService, { provide: Router, useValue: mockRouter }],
     });
     navigationService = TestBed.inject(NavigationService);
   });

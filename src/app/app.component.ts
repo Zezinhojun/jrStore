@@ -1,4 +1,3 @@
-
 import { Component, ErrorHandler } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -14,10 +13,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   imports: [RouterOutlet, HeaderComponent, SpinnerComponent],
-  providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler },
-  { provide: HTTP_INTERCEPTORS, useValue: SpinnerInterceptor, multi: true },
-  ]
+  providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useValue: SpinnerInterceptor, multi: true },
+  ],
 })
-export class AppComponent {
-
-}
+export class AppComponent {}

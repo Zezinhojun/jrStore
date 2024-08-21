@@ -4,7 +4,6 @@ import OrdersComponent from './orders.component';
 import { ToastrService } from 'ngx-toastr';
 import MockToastrService from 'app/__tests__/__mocks__/mockToastrService';
 
-
 describe('OrdersComponent', () => {
   let component: OrdersComponent;
   let fixture: ComponentFixture<OrdersComponent>;
@@ -15,11 +14,8 @@ describe('OrdersComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [OrdersComponent],
-      providers: [
-        { provide: ToastrService, useValue: mockToastrService }
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: ToastrService, useValue: mockToastrService }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(OrdersComponent);
     component = fixture.componentInstance;

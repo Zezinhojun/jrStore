@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GenerateRatingStarService {
-  constructor(private _sanitizer: DomSanitizer) { }
+  constructor(private _sanitizer: DomSanitizer) {}
 
   generateRatingStar(index: number, rate: number): SafeHtml {
     let svgContent = null;

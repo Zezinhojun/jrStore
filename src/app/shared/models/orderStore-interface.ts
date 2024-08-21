@@ -1,8 +1,8 @@
-import { IOrder } from "./orders-interface";
+import { IOrder } from './orders-interface';
 
 export interface IOrderStore {
-  orders: IOrder[]
+  orders: IOrder[];
   totalAmount: number;
   ordersCount: number;
-  filteredOrders: IOrder[],
+  filteredOrders: IOrder[];
 }

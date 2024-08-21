@@ -7,5 +7,4 @@ export default class MockCartStore {
   removeProductFromCart = jasmine.createSpy('removeProductFromCart');
   decrementProductQuantity = jasmine.createSpy('decrementProductQuantity');
   resetCart = jasmine.createSpy('resetCart');
-
 }

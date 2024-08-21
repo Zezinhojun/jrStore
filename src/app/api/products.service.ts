@@ -1,13 +1,12 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable, inject, signal } from "@angular/core";
-import { environment } from "@envs/environment";
-import { IProduct } from "@shared/models/products-interface";
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject, signal } from '@angular/core';
+import { environment } from '@envs/environment';
+import { IProduct } from '@shared/models/products-interface';
 
-
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ProductsService {
   public products = signal<IProduct[]>([]);
-  private readonly _http = inject(HttpClient)
+  private readonly _http = inject(HttpClient);
   private readonly _endPoint = environment.apiURL;
 
   constructor() {
@@ -19,12 +18,11 @@ export class ProductsService {
   }
 
   getProductById(id: number): IProduct | undefined {
-    return this.products().find(product => product.id === id);
+    return this.products().find((product) => product.id === id);
   }
 
-
   private loadProducts() {
-    this._http.get<IProduct[]>(this._endPoint).subscribe(products => {
+    this._http.get<IProduct[]>(this._endPoint).subscribe((products) => {
       this.products.set(products);
     });
   }

@@ -6,13 +6,14 @@ import { GenerateRatingStarService } from '@shared/services/generateRatingStar/g
   selector: 'app-rating-stars',
   standalone: true,
   imports: [],
-  template: `
-<span class="flex items-center">
-  @for (item of starsArray; track index; let index = $index) {
-  <span [innerHTML]="generateStarSVG(index)"></span>
-  }
-  <span class="text-xs ml-3 text-gray-600">{{ratingCount ?? 0}} reviews</span>
-</span>`,
+  template: ` <span class="flex items-center">
+    @for (item of starsArray; track index; let index = $index) {
+      <span [innerHTML]="generateStarSVG(index)"></span>
+    }
+    <span class="text-xs ml-3 text-gray-600"
+      >{{ ratingCount ?? 0 }} reviews</span
+    >
+  </span>`,
 })
 export class RatingStarsComponent {
   @Input() ratingRate: number | undefined;
@@ -21,6 +22,9 @@ export class RatingStarsComponent {
   private readonly _generateRatingStar = inject(GenerateRatingStarService);
 
   generateStarSVG(index: number): SafeHtml {
-    return this._generateRatingStar.generateRatingStar(index, this.ratingRate ?? 0);
+    return this._generateRatingStar.generateRatingStar(
+      index,
+      this.ratingRate ?? 0,
+    );
   }
 }

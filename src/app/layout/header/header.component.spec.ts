@@ -20,10 +20,9 @@ describe('HeaderComponent', () => {
       imports: [HeaderComponent],
       providers: [
         { provide: ToastrService, useValue: mockToastrService },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
-    })
-      .compileComponents();
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;

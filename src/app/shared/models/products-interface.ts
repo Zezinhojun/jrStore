@@ -1,6 +1,6 @@
 interface Rating {
   rate: number;
-  count: number
+  count: number;
 }
 
 export interface IProduct {
@@ -12,6 +12,5 @@ export interface IProduct {
   image: string;
   rating: Rating;
   qty: number;
-  subTotal: number
+  subTotal: number;
 }
-

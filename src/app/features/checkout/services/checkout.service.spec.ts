@@ -1,16 +1,16 @@
-import MockNavigationService from "app/__tests__/__mocks__/mockNavigationService";
-import { CheckoutService } from "./checkout.service"
-import MockOrdersService from "app/__tests__/__mocks__/mockOrdersService";
-import MockCartService from "app/__tests__/__mocks__/mockCartService";
-import { TestBed } from "@angular/core/testing";
-import { NavigationService } from "@shared/services/navigation/navigation.service";
-import { OrdersService } from "app/features/orders/services/orders.service";
-import { CartService } from "@shared/services/cart/cart.service";
-import { ActivatedRoute } from "@angular/router";
-import { mockOrder } from "app/__tests__/__mocks__/mockOrder";
-import { mockProducts } from "app/__tests__/__mocks__/mockProducts";
-import { Status } from "@shared/utils/order-status";
-import MockActivatedRoute from "app/__tests__/__mocks__/mockActivatedRoute";
+import MockNavigationService from 'app/__tests__/__mocks__/mockNavigationService';
+import { CheckoutService } from './checkout.service';
+import MockOrdersService from 'app/__tests__/__mocks__/mockOrdersService';
+import MockCartService from 'app/__tests__/__mocks__/mockCartService';
+import { TestBed } from '@angular/core/testing';
+import { NavigationService } from '@shared/services/navigation/navigation.service';
+import { OrdersService } from 'app/features/orders/services/orders.service';
+import { CartService } from '@shared/services/cart/cart.service';
+import { ActivatedRoute } from '@angular/router';
+import { mockOrder } from 'app/__tests__/__mocks__/mockOrder';
+import { mockProducts } from 'app/__tests__/__mocks__/mockProducts';
+import { Status } from '@shared/utils/order-status';
+import MockActivatedRoute from 'app/__tests__/__mocks__/mockActivatedRoute';
 
 describe('CheckoutService', () => {
   let checkoutService: CheckoutService;
@@ -18,7 +18,7 @@ describe('CheckoutService', () => {
   let mockOrdersService: MockOrdersService;
   let mockCartService: MockCartService;
   let mockActivatedRoute: MockActivatedRoute;
-  const orderId = "123"
+  const orderId = '123';
   const productId = 1;
 
   beforeEach(() => {
@@ -32,11 +32,11 @@ describe('CheckoutService', () => {
         { provide: NavigationService, useValue: mockNavigationService },
         { provide: OrdersService, useValue: mockOrdersService },
         { provide: CartService, useValue: mockCartService },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
-    })
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+      ],
+    });
     checkoutService = TestBed.inject(CheckoutService);
-  })
+  });
 
   it('should create an instance of CheckoutService', () => {
     expect(checkoutService).toBeTruthy();
@@ -52,14 +52,20 @@ describe('CheckoutService', () => {
     mockOrdersService.getOrderById.and.returnValue(order);
     checkoutService.updateOrder(orderId, newState);
 
-    expect(mockOrdersService.updateOrderById).toHaveBeenCalledWith(order, newState);
+    expect(mockOrdersService.updateOrderById).toHaveBeenCalledWith(
+      order,
+      newState,
+    );
     expect(mockOrdersService.updateOrderById).toHaveBeenCalledTimes(1);
 
     mockOrdersService.updateOrderById.calls.reset();
     mockOrdersService.getOrderById.and.returnValue(order);
     checkoutService.updateOrder(orderId);
 
-    expect(mockOrdersService.updateOrderById).toHaveBeenCalledWith(order, undefined);
+    expect(mockOrdersService.updateOrderById).toHaveBeenCalledWith(
+      order,
+      undefined,
+    );
     expect(mockOrdersService.updateOrderById).toHaveBeenCalledTimes(1);
 
     mockOrdersService.updateOrderById.calls.reset();
@@ -76,10 +82,12 @@ describe('CheckoutService', () => {
 
     expect(mockOrdersService.getOrderById).toHaveBeenCalledWith(orderId);
     expect(mockCartService.clearCart).toHaveBeenCalledWith(false);
-    mockProducts.forEach(item => {
+    mockProducts.forEach((item) => {
       expect(mockCartService.addToCart).toHaveBeenCalledWith(item);
     });
-    expect(mockCartService.addToCart).toHaveBeenCalledTimes(mockProducts.length);
+    expect(mockCartService.addToCart).toHaveBeenCalledTimes(
+      mockProducts.length,
+    );
   });
 
   it('should not modify the cart if order does not exist', () => {
@@ -114,7 +122,10 @@ describe('CheckoutService', () => {
     checkoutService.finalizeOrder();
 
     expect(checkoutService.retrieveCurrentOrderId).toHaveBeenCalled();
-    expect(checkoutService.updateOrder).toHaveBeenCalledWith(orderId, Status.CLOSED);
+    expect(checkoutService.updateOrder).toHaveBeenCalledWith(
+      orderId,
+      Status.CLOSED,
+    );
     expect(checkoutService.resetCurrentOrderId).toHaveBeenCalled();
     expect(checkoutService.completeOrderProcessing).not.toHaveBeenCalled();
     expect(mockCartService.clearCart).toHaveBeenCalledWith(false);
@@ -137,7 +148,9 @@ describe('CheckoutService', () => {
 
   it('should decrement product quantity', () => {
     checkoutService.decrementProductQuantity(productId);
-    expect(mockCartService.decrementProductQuantity).toHaveBeenCalledWith(productId);
+    expect(mockCartService.decrementProductQuantity).toHaveBeenCalledWith(
+      productId,
+    );
   });
 
   it('should remove order if cart is empty', () => {
@@ -168,5 +181,4 @@ describe('CheckoutService', () => {
     checkoutService.resetCurrentOrderId();
     expect(mockOrdersService.resetOrderId).toHaveBeenCalled();
   });
-
-})
+});

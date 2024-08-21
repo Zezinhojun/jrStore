@@ -1,5 +1,11 @@
 import { computed, inject } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { ICartStore } from '@shared/models/cartStore-interface';
 import { IProduct } from '@shared/models/products-interface';
 import { ToastMessage } from '@shared/utils/toast-message';
@@ -10,38 +16,40 @@ import * as cartUtils from './../utils/shopping-cart-utils';
 const initialState: ICartStore = {
   products: [],
   totalAmount: 0,
-  productsCount: 0
-}
+  productsCount: 0,
+};
 
 export const CartStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed(({ products }) => ({
     productsCount: computed(() => cartUtils.calculateProductCount(products())),
-    totalAmount: computed(() => cartUtils.calculateTotalAmount(products()))
+    totalAmount: computed(() => cartUtils.calculateTotalAmount(products())),
   })),
 
   withMethods(({ products, ...store }, toastSvc = inject(ToastrService)) => ({
     updateCart(id: string, data: ICartStore) {
-      patchState(store, { [id]: data })
+      patchState(store, { [id]: data });
     },
 
     addProductToCart(product: IProduct) {
-      const existingProduct = products().find((item: IProduct) => item.id === product.id)
+      const existingProduct = products().find(
+        (item: IProduct) => item.id === product.id,
+      );
       if (!existingProduct) {
-        patchState(store, { products: [...products(), product] })
+        patchState(store, { products: [...products(), product] });
       } else {
-        existingProduct.qty++
-        existingProduct.subTotal = existingProduct.qty * existingProduct.price
-        patchState(store, { products: [...products()] })
+        existingProduct.qty++;
+        existingProduct.subTotal = existingProduct.qty * existingProduct.price;
+        patchState(store, { products: [...products()] });
       }
-      toastSvc.success(ToastMessage.ADD_ITEM)
+      toastSvc.success(ToastMessage.ADD_ITEM);
     },
 
     removeProductFromCart(id: number) {
-      const updateProducts = products().filter(product => product.id !== id)
-      patchState(store, { products: updateProducts })
-      toastSvc.info(ToastMessage.REMOVE_ITEM)
+      const updateProducts = products().filter((product) => product.id !== id);
+      patchState(store, { products: updateProducts });
+      toastSvc.info(ToastMessage.REMOVE_ITEM);
     },
 
     decrementProductQuantity(id: number) {
@@ -57,14 +65,14 @@ export const CartStore = signalStore(
       }, [] as IProduct[]);
 
       patchState(store, { products: updatedProducts });
-      products().length !== 0 ? toastSvc.info(ToastMessage.REMOVE_ONE)
-        : toastSvc.info(ToastMessage.REMOVE_ITEM)
+      products().length !== 0
+        ? toastSvc.info(ToastMessage.REMOVE_ONE)
+        : toastSvc.info(ToastMessage.REMOVE_ITEM);
     },
 
     resetCart(finished: boolean) {
-      patchState(store, initialState)
-      if (finished) toastSvc.info(ToastMessage.CART_CLEAN)
-    }
-  }))
-)
-
+      patchState(store, initialState);
+      if (finished) toastSvc.info(ToastMessage.CART_CLEAN);
+    },
+  })),
+);

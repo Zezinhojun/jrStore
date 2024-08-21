@@ -4,10 +4,10 @@ import { CartStore } from '@shared/store/shopping-cart.store';
 import GlobalErrorHandler from '../globalErrorHandling/globalErrorHandler.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
-  private readonly cartStore = inject(CartStore)
+  private readonly cartStore = inject(CartStore);
   private readonly _globalErrorHandler = inject(GlobalErrorHandler);
   readonly products = signal(() => this.cartStore.products());
   readonly totalAmount = signal(() => this.cartStore.totalAmount());
@@ -15,19 +15,19 @@ export class CartService {
 
   hasProduct(): boolean {
     try {
-      return this.cartStore.products().length > 0
+      return this.cartStore.products().length > 0;
     } catch (error) {
       this._globalErrorHandler.handleError(error);
-      return false
+      return false;
     }
   }
 
   getProduct(): IProduct[] {
     try {
-      return this.cartStore.products()
+      return this.cartStore.products();
     } catch (error) {
       this._globalErrorHandler.handleError(error);
-      return []
+      return [];
     }
   }
 
@@ -68,14 +68,14 @@ export class CartService {
       return {
         products: this.products(),
         totalAmount: this.totalAmount(),
-        productsCount: this.productsCount()
+        productsCount: this.productsCount(),
       };
     } catch (error) {
       this._globalErrorHandler.handleError(error);
       return {
         products: [],
         totalAmount: 0,
-        productsCount: 0
+        productsCount: 0,
       };
     }
   }

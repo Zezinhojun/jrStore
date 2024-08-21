@@ -7,15 +7,14 @@ import { Status } from '@shared/utils/order-status';
 import { CartService } from '../../../shared/services/cart/cart.service';
 
 @Injectable({ providedIn: 'root' })
-
 export class OrdersService {
-  public orderId = signal<string>("")
-  private readonly _cartSvc = inject(CartService)
-  private readonly _navigationSvc = inject(NavigationService)
-  private readonly _orderSvc = inject(OrderService)
+  public orderId = signal<string>('');
+  private readonly _cartSvc = inject(CartService);
+  private readonly _navigationSvc = inject(NavigationService);
+  private readonly _orderSvc = inject(OrderService);
 
   clearCart() {
-    this._cartSvc.clearCart(false)
+    this._cartSvc.clearCart(false);
   }
 
   resetOrderFilter(): void {
@@ -47,36 +46,36 @@ export class OrdersService {
 
   saveOrderAsPending(): void {
     if (this._cartSvc.hasProduct()) {
-      this._orderSvc.addOrder(this._cartSvc.getProduct(), Status.PENDING)
-      this._cartSvc.clearCart(false)
-      this.resetOrderId()
+      this._orderSvc.addOrder(this._cartSvc.getProduct(), Status.PENDING);
+      this._cartSvc.clearCart(false);
+      this.resetOrderId();
     }
   }
 
   updateOrderById(order: IOrder, state?: string): void {
     if (this._cartSvc.hasProduct()) {
-      this._orderSvc.updateOrderById(order, this._cartSvc.getProduct(), state)
-      this._cartSvc.clearCart(false)
-      this.resetOrderId()
-      this._navigationSvc.navigateToOrders()
+      this._orderSvc.updateOrderById(order, this._cartSvc.getProduct(), state);
+      this._cartSvc.clearCart(false);
+      this.resetOrderId();
+      this._navigationSvc.navigateToOrders();
     }
   }
 
   storeOrderId(id: string): void {
-    this.orderId.set(id)
+    this.orderId.set(id);
   }
 
   retrieveOrderId(): string | undefined {
-    return this.orderId()
+    return this.orderId();
   }
 
   resetOrderId(): void {
-    this.orderId.set("")
+    this.orderId.set('');
   }
 
   continueShopping(): void {
-    this.resetOrderId()
-    this._navigationSvc.navigateHome()
+    this.resetOrderId();
+    this._navigationSvc.navigateHome();
   }
 
   goToCheckout(id: string): void {
@@ -98,5 +97,4 @@ export class OrdersService {
   getFilteredOrders() {
     return this._orderSvc.filteredOrders();
   }
-
 }

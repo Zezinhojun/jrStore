@@ -8,11 +8,10 @@ import { OrdersService } from './services/orders.service';
   standalone: true,
   imports: [CurrencyPipe],
   templateUrl: './orders.component.html',
-  styleUrl: './orders.component.scss'
+  styleUrl: './orders.component.scss',
 })
-
 export default class OrdersComponent {
-  private readonly _ordersSvc = inject(OrdersService)
+  private readonly _ordersSvc = inject(OrdersService);
   public readonly orders = this._ordersSvc.getOrders();
   public readonly totalAmount = this._ordersSvc.getTotalAmount();
   public readonly ordersCount = this._ordersSvc.getOrdersCount();
@@ -30,41 +29,41 @@ export default class OrdersComponent {
   clearFilter() {
     this._ordersSvc.resetOrderFilter();
     this.isSelectDropdownOpen.set(false);
-    this.selectFilter = "clear";
+    this.selectFilter = 'clear';
   }
 
   clearOrders() {
-    this._ordersSvc.deleteAllOrders()
+    this._ordersSvc.deleteAllOrders();
   }
 
   onCloseOrder(): void {
-    this._ordersSvc.closeOrder()
+    this._ordersSvc.closeOrder();
   }
 
   onContinue(): void {
-    this._ordersSvc.continueShopping()
-    this._ordersSvc.clearCart()
+    this._ordersSvc.continueShopping();
+    this._ordersSvc.clearCart();
   }
 
   removeOneOrder(id: string) {
-    this._ordersSvc.deleteOrderById(id)
+    this._ordersSvc.deleteOrderById(id);
   }
 
   onGoToCheckout(id: string) {
-    this._ordersSvc.storeOrderId(id)
-    this._ordersSvc.goToCheckout(id)
+    this._ordersSvc.storeOrderId(id);
+    this._ordersSvc.goToCheckout(id);
   }
 
   toggleSelectDropdown() {
-    this.isSelectDropdownOpen.set(!this.isSelectDropdownOpen())
+    this.isSelectDropdownOpen.set(!this.isSelectDropdownOpen());
   }
 
   toggleActionDropdown(itemId: string) {
-    this.dropdownStates[parseInt(itemId)] = !this.dropdownStates[parseInt(itemId)];
+    this.dropdownStates[parseInt(itemId)] =
+      !this.dropdownStates[parseInt(itemId)];
   }
 
   isActionDropdownOpen(itemId: string): boolean {
     return !!this.dropdownStates[parseInt(itemId)];
   }
-
 }

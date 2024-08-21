@@ -5,15 +5,15 @@ import { IProduct } from '@shared/models/products-interface';
 import { IOrder } from '@shared/models/orders-interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
   private readonly OrderStore = inject(OrderStore);
   private readonly _globalErrorHandler = inject(GlobalErrorHandler);
-  readonly ordersCount = signal(() => this.OrderStore.ordersCount())
-  readonly totalAmount = signal(() => this.OrderStore.totalAmount())
-  readonly orders = signal(() => this.OrderStore.orders())
-  readonly filteredOrders = signal(() => this.OrderStore.filteredOrders())
+  readonly ordersCount = signal(() => this.OrderStore.ordersCount());
+  readonly totalAmount = signal(() => this.OrderStore.totalAmount());
+  readonly orders = signal(() => this.OrderStore.orders());
+  readonly filteredOrders = signal(() => this.OrderStore.filteredOrders());
 
   addOrder(items: IProduct[], state: string, id?: string): void {
     try {
@@ -77,7 +77,7 @@ export class OrderService {
       orders: this.orders(),
       totalAmount: this.totalAmount(),
       ordersCount: this.ordersCount(),
-      filteredOrders: this.filteredOrders()
-    }
+      filteredOrders: this.filteredOrders(),
+    };
   }
 }

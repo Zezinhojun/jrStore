@@ -10,18 +10,18 @@ import { CardComponent } from './card/card.component';
   selector: 'app-products',
   standalone: true,
   imports: [CardComponent],
-  templateUrl: './products.component.html'
+  templateUrl: './products.component.html',
 })
 export default class ProductsComponent {
-  private readonly _productSvc = inject(ProductsService)
+  private readonly _productSvc = inject(ProductsService);
   private readonly _cartSvc = inject(CartService);
-  private readonly _navigationSvc = inject(NavigationService)
-  public products = this._productSvc.products
+  private readonly _navigationSvc = inject(NavigationService);
+  public products = this._productSvc.products;
   public isDropdownOpen = signal<boolean>(false);
   public selectedSortOrder: 'asc' | 'desc' = 'desc';
 
   toggleDropdown() {
-    this.isDropdownOpen.set(!this.isDropdownOpen())
+    this.isDropdownOpen.set(!this.isDropdownOpen());
   }
 
   updateSortOrder(order: 'asc' | 'desc') {
@@ -31,7 +31,7 @@ export default class ProductsComponent {
   }
 
   onAddToCart(product: IProduct): void {
-    this._cartSvc.addToCart(product)
+    this._cartSvc.addToCart(product);
   }
 
   buyNow() {

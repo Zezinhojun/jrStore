@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -12,18 +10,18 @@ module.exports = {
         'secondary-dark': '#4d8076',
       },
       fontFamily: {
-        'roboto': ['Roboto', 'sans-serif'],
-        'poppins': ['Poppins', 'sans-serif'],
-        'merriweather': ['Merriweather', 'serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+        merriweather: ['Merriweather', 'serif'],
       },
       fontSize: {
-        'tiny': '0.65rem',
-        'huge': '10rem',
+        tiny: '0.65rem',
+        huge: '10rem',
       },
       height: {
-        '120': '30rem',
+        120: '30rem',
       },
     },
   },
   plugins: [],
-}
+};

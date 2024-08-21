@@ -13,26 +13,26 @@ import { OrdersService } from './orders.service';
 
 describe('OrderService', () => {
   let ordersService: OrdersService;
-  let mockOrderService: MockOrderService
+  let mockOrderService: MockOrderService;
   let mockCartService: MockCartService;
   let mockNavigationService: MockNavigationService;
 
   beforeEach(async () => {
-
-    mockOrderService = new MockOrderService()
+    mockOrderService = new MockOrderService();
     mockCartService = new MockCartService();
     mockNavigationService = new MockNavigationService();
 
     await TestBed.configureTestingModule({
-      providers: [OrdersService,
+      providers: [
+        OrdersService,
         { provide: CartService, useValue: mockCartService },
         { provide: OrderService, useValue: mockOrderService },
         { provide: NavigationService, useValue: mockNavigationService },
       ],
-    }).compileComponents()
+    }).compileComponents();
 
     ordersService = TestBed.inject(OrdersService);
-  })
+  });
 
   it('should create an instance of OrdersService', () => {
     expect(ordersService).toBeTruthy();
@@ -66,7 +66,10 @@ describe('OrderService', () => {
     mockCartService.hasProduct.and.returnValue(true);
     mockCartService.getProduct.and.returnValue(mockProducts);
     ordersService.closeOrder();
-    expect(mockOrderService.addOrder).toHaveBeenCalledWith(mockProducts, Status.CLOSED);
+    expect(mockOrderService.addOrder).toHaveBeenCalledWith(
+      mockProducts,
+      Status.CLOSED,
+    );
     expect(mockCartService.clearCart).toHaveBeenCalled();
     expect(mockNavigationService.navigateToOrders).toHaveBeenCalled();
   });
@@ -75,7 +78,10 @@ describe('OrderService', () => {
     mockCartService.hasProduct.and.returnValue(true);
     mockCartService.getProduct.and.returnValue(mockProducts);
     ordersService.saveOrderAsPending();
-    expect(mockOrderService.addOrder).toHaveBeenCalledWith(mockProducts, Status.PENDING);
+    expect(mockOrderService.addOrder).toHaveBeenCalledWith(
+      mockProducts,
+      Status.PENDING,
+    );
     expect(mockCartService.clearCart).toHaveBeenCalled();
   });
 
@@ -84,7 +90,11 @@ describe('OrderService', () => {
     mockCartService.getProduct.and.returnValue(mockProducts);
     const state = Status.CLOSED;
     ordersService.updateOrderById(mockOrder, state);
-    expect(mockOrderService.updateOrderById).toHaveBeenCalledWith(mockOrder, mockProducts, state);
+    expect(mockOrderService.updateOrderById).toHaveBeenCalledWith(
+      mockOrder,
+      mockProducts,
+      state,
+    );
     expect(mockCartService.clearCart).toHaveBeenCalled();
     expect(mockNavigationService.navigateToOrders).toHaveBeenCalled();
   });
@@ -108,6 +118,8 @@ describe('OrderService', () => {
   it('should go to checkout with ID', () => {
     const orderId = '123';
     ordersService.goToCheckout(orderId);
-    expect(mockNavigationService.navigateToCheckout).toHaveBeenCalledWith(orderId);
-  })
-})
+    expect(mockNavigationService.navigateToCheckout).toHaveBeenCalledWith(
+      orderId,
+    );
+  });
+});

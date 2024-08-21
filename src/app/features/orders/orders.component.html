@@ -1,159 +1,265 @@
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
     <div class="flex flex-col w-full mb-10 text-center">
-      <h1 class="mb-2 text-3xl font-medium text-gray-900 sm:text-4xl title-font">Orders page</h1>
+      <h1
+        class="mb-2 text-3xl font-medium text-gray-900 sm:text-4xl title-font"
+      >
+        Orders page
+      </h1>
     </div>
-    @if(ordersCount()) {
-    <div class="container px-5 py-20 mx-auto">
-      <div class="flex justify-end mx-auto max-w-screen-xl px-4 lg:px-12">
-        <button (click)="clearOrders()" type="button"
-          class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-          Clear all
-        </button>
-      </div>
-      <section class="p-3 sm:p-5 container w-auto h-full">
-        <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-          <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-            <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
+    @if (ordersCount()) {
+      <div class="container px-5 py-20 mx-auto">
+        <div class="flex justify-end mx-auto max-w-screen-xl px-4 lg:px-12">
+          <button
+            (click)="clearOrders()"
+            type="button"
+            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+          >
+            Clear all
+          </button>
+        </div>
+        <section class="p-3 sm:p-5 container w-auto h-full">
+          <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+            <div
+              class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
+            >
               <div
-                class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <button type="button" (click)="onContinue()"
-                  class="flex items-center w-[14rem] justify-evenly border border-secondary-dark text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-lg px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
-                  New order
-                </button>
-                <div class="flex container mx-auto mb-6 justify-end mt-6">
-                  <div>
-                    <div class="relative mt-2">
-                      <button type="button"
-                        class=" relative w-[200px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                        aria-haspopup="listbox" [attr.aria-expanded]="isSelectDropdownOpen()"
-                        aria-labelledby="listbox-label" (click)="toggleSelectDropdown()">
-                        <span class="flex items-center">
-                          <span class="ml-3 block truncate">Sort: {{ selectFilter }}</span>
-                        </span>
-                        <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd"
-                              d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z"
-                              clip-rule="evenodd" />
-                          </svg>
-                        </span>
-                      </button>
-                      @if(isSelectDropdownOpen()){
-                      <ul
-                        class="absolute z-10 mt-1 max-h-56 w-full min-w-[200px] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                        tabindex="-1" role="listbox" aria-labelledby="listbox-label">
-                        <li
-                          class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
-                          role="option" (click)="applyFilter('pending')">
-                          <div class="flex items-center">
-                            <span class="ml-3 block truncate">Pending</span>
-                          </div>
-                          @if(selectFilter === "pending"){
-                          <span class="flex items-center text-indigo-600">
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <path fill-rule="evenodd"
-                                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                clip-rule="evenodd" />
+                class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4"
+              >
+                <div
+                  class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
+                >
+                  <button
+                    type="button"
+                    (click)="onContinue()"
+                    class="flex items-center w-[14rem] justify-evenly border border-secondary-dark text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-lg px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                    New order
+                  </button>
+                  <div class="flex container mx-auto mb-6 justify-end mt-6">
+                    <div>
+                      <div class="relative mt-2">
+                        <button
+                          type="button"
+                          class="relative w-[200px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                          aria-haspopup="listbox"
+                          [attr.aria-expanded]="isSelectDropdownOpen()"
+                          aria-labelledby="listbox-label"
+                          (click)="toggleSelectDropdown()"
+                        >
+                          <span class="flex items-center">
+                            <span class="ml-3 block truncate"
+                              >Sort: {{ selectFilter }}</span
+                            >
+                          </span>
+                          <span
+                            class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z"
+                                clip-rule="evenodd"
+                              />
                             </svg>
                           </span>
-                          }
-                        </li>
-                        <li
-                          class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
-                          role="option" (click)="applyFilter('closed')">
-                          <div class="flex items-center">
-                            <span class="ml-3 block truncate">Closed</span>
-                          </div>
-                          @if(selectFilter == "clear"){
-                          <span class="flex items-center text-indigo-600">
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <path fill-rule="evenodd"
-                                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                clip-rule="evenodd" />
-                            </svg>
-                          </span>
-                          }
-                        </li>
-                        <li
-                          class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
-                          role="option" (click)="clearFilter()">
-                          <div class="flex items-center">
-                            <span class="ml-3 block truncate">Clear</span>
-                          </div>
-                      </ul>
-                      }
+                        </button>
+                        @if (isSelectDropdownOpen()) {
+                          <ul
+                            class="absolute z-10 mt-1 max-h-56 w-full min-w-[200px] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                            tabindex="-1"
+                            role="listbox"
+                            aria-labelledby="listbox-label"
+                          >
+                            <li
+                              class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
+                              role="option"
+                              (click)="applyFilter('pending')"
+                            >
+                              <div class="flex items-center">
+                                <span class="ml-3 block truncate">Pending</span>
+                              </div>
+                              @if (selectFilter === 'pending') {
+                                <span class="flex items-center text-indigo-600">
+                                  <svg
+                                    class="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                </span>
+                              }
+                            </li>
+                            <li
+                              class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
+                              role="option"
+                              (click)="applyFilter('closed')"
+                            >
+                              <div class="flex items-center">
+                                <span class="ml-3 block truncate">Closed</span>
+                              </div>
+                              @if (selectFilter == 'clear') {
+                                <span class="flex items-center text-indigo-600">
+                                  <svg
+                                    class="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                </span>
+                              }
+                            </li>
+                            <li
+                              class="relative cursor-pointer select-none py-2 px-3 text-gray-900 hover:bg-green-100 flex items-center justify-between"
+                              role="option"
+                              (click)="clearFilter()"
+                            >
+                              <div class="flex items-center">
+                                <span class="ml-3 block truncate">Clear</span>
+                              </div>
+                            </li>
+                          </ul>
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-secondary-dark dark:text-gray-200">
-                  <tr class="text-lg">
-                    <th scope="col" class="px-4 py-3">Order Nº</th>
-                    <th scope="col" class="px-4 py-3 text-center">Total</th>
-                    <th scope="col" class="px-4 py-3 text-center">Status</th>
-                    <th scope="col" class="px-4 py-3 text-center"> Actions
-                      <span class="sr-only">Actions</span>
-                    </th>
-                  </tr>
-                </thead>
-                @for (item of filteredOrders(); track $index) {
-                <tbody>
-                  <tr class="px-2 py-2 text-lg font-bold border-b dark:bg-gray-200">
-                    <th scope="row" class="px-6 py-4 text-lg font-bold text-gray-900 dark:text-black">
-                      {{item.id}}</th>
-                    <td class="px-6 py-4 ml-4 text-lg font-bold text-gray-900 dark:text-black text-center">
-                      {{item.totalAmount|
-                      currency:'BRL':'symbol'}}</td>
-                    @if(item.state === "closed"){
-                    <td class="px-4 py-3 text-center">
-                      <img src="../../../assets/svgs/closed.svg" alt="Filter closed"
-                        class="mx-auto w-6 h-6 hover:opacity-80" />
-                    </td>
-                    } @else {
-                    <td class="px-4 py-3 text-center">
-                      <img src="../../../assets/svgs/pending.svg" alt="Filter pending"
-                        class="mx-auto w-6 h-6 hover:opacity-80" />
-                    </td>
-                    }
-                    <td class="flex justify-center flex-wrap items-center pt-4">
-                      @if(item.state === "pending"){
-                      <button (click)="removeOneOrder(item.id)"
-                        class="flex justify-center  p-2 text-white rounded hover:bg-red-200 focus:outline-none">
-                        <img src="../../../assets/svgs/remove.svg" alt="Remove" class="h-6 w-6" />
-
-                      </button>
-                      <button (click)="onGoToCheckout(item.id)"
-                        class="flex justify-center  p-2 text-white rounded-full hover:bg-green-200 focus:outline-none">
-                        <img src="../../../assets/svgs/goto-checkout.svg" alt="Go to checkout" class="h-6 w-6" />
-                      </button>
-                      }@else {
-                      <button (click)="removeOneOrder(item.id)"
-                        class="flex justify-center p-2 text-white rounded hover:bg-red-200 focus:outline-none">
-                        <img src="../../../assets/svgs/remove.svg" alt="Remove" class="h-6 w-6" />
-                      </button>
-                      }
-                    </td>
-                  </tr>
-                </tbody>
-                }
-              </table>
+              <div class="overflow-x-auto">
+                <table
+                  class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+                >
+                  <thead
+                    class="text-xs text-gray-700 bg-gray-50 dark:bg-secondary-dark dark:text-gray-200"
+                  >
+                    <tr class="text-lg">
+                      <th scope="col" class="px-4 py-3">Order Nº</th>
+                      <th scope="col" class="px-4 py-3 text-center">Total</th>
+                      <th scope="col" class="px-4 py-3 text-center">Status</th>
+                      <th scope="col" class="px-4 py-3 text-center">
+                        Actions
+                        <span class="sr-only">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  @for (item of filteredOrders(); track $index) {
+                    <tbody>
+                      <tr
+                        class="px-2 py-2 text-lg font-bold border-b dark:bg-gray-200"
+                      >
+                        <th
+                          scope="row"
+                          class="px-6 py-4 text-lg font-bold text-gray-900 dark:text-black"
+                        >
+                          {{ item.id }}
+                        </th>
+                        <td
+                          class="px-6 py-4 ml-4 text-lg font-bold text-gray-900 dark:text-black text-center"
+                        >
+                          {{ item.totalAmount | currency: 'BRL' : 'symbol' }}
+                        </td>
+                        @if (item.state === 'closed') {
+                          <td class="px-4 py-3 text-center">
+                            <img
+                              src="../../../assets/svgs/closed.svg"
+                              alt="Filter closed"
+                              class="mx-auto w-6 h-6 hover:opacity-80"
+                            />
+                          </td>
+                        } @else {
+                          <td class="px-4 py-3 text-center">
+                            <img
+                              src="../../../assets/svgs/pending.svg"
+                              alt="Filter pending"
+                              class="mx-auto w-6 h-6 hover:opacity-80"
+                            />
+                          </td>
+                        }
+                        <td
+                          class="flex justify-center flex-wrap items-center pt-4"
+                        >
+                          @if (item.state === 'pending') {
+                            <button
+                              (click)="removeOneOrder(item.id)"
+                              class="flex justify-center p-2 text-white rounded hover:bg-red-200 focus:outline-none"
+                            >
+                              <img
+                                src="../../../assets/svgs/remove.svg"
+                                alt="Remove"
+                                class="h-6 w-6"
+                              />
+                            </button>
+                            <button
+                              (click)="onGoToCheckout(item.id)"
+                              class="flex justify-center p-2 text-white rounded-full hover:bg-green-200 focus:outline-none"
+                            >
+                              <img
+                                src="../../../assets/svgs/goto-checkout.svg"
+                                alt="Go to checkout"
+                                class="h-6 w-6"
+                              />
+                            </button>
+                          } @else {
+                            <button
+                              (click)="removeOneOrder(item.id)"
+                              class="flex justify-center p-2 text-white rounded hover:bg-red-200 focus:outline-none"
+                            >
+                              <img
+                                src="../../../assets/svgs/remove.svg"
+                                alt="Remove"
+                                class="h-6 w-6"
+                              />
+                            </button>
+                          }
+                        </td>
+                      </tr>
+                    </tbody>
+                  }
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
     } @else {
-    <div class="flex flex-col w-full mb-20 text-center">
-      <h3 class="my-2 text-3xl font-medium text-gray-900 sm:text-4xl title-font">The orders is empty</h3>
-    </div>
+      <div class="flex flex-col w-full mb-20 text-center">
+        <h3
+          class="my-2 text-3xl font-medium text-gray-900 sm:text-4xl title-font"
+        >
+          The orders is empty
+        </h3>
+      </div>
     }
   </div>
 </section>

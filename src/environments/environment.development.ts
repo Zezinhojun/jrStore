@@ -1,3 +1,3 @@
 export const environment = {
-  apiURL: "https://fakestoreapi.com/products"
+  apiURL: 'https://fakestoreapi.com/products',
 };

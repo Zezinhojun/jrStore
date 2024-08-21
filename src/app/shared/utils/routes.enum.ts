@@ -3,5 +3,5 @@ export enum Routes {
   CHECKOUT = 'checkout',
   CHECKOUT_WITH_ID = 'checkout/:id',
   ORDERS = 'orders',
-  HOME = ''
+  HOME = '',
 }

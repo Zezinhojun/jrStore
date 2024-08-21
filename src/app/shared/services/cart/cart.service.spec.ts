@@ -25,7 +25,7 @@ describe('Service: Cart', () => {
         { provide: ToastrService, useValue: mockToastrService },
         { provide: CartStore, useValue: mockCartStore },
         { provide: GlobalErrorHandler, useValue: mockGlobalErrorHandler },
-      ]
+      ],
     });
     cartService = TestBed.inject(CartService);
   });
@@ -54,7 +54,7 @@ describe('Service: Cart', () => {
     expect(mockGlobalErrorHandler.handleError).toHaveBeenCalledWith(error);
   });
 
-  it('should call CartStore\'s clearCart method when CartService\'s clearCart is invoked', () => {
+  it("should call CartStore's clearCart method when CartService's clearCart is invoked", () => {
     cartService.clearCart(false);
     expect(mockCartStore.resetCart).toHaveBeenCalledWith(false);
     expect(mockGlobalErrorHandler.handleError).not.toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe('Service: Cart', () => {
     expect(mockGlobalErrorHandler.handleError).toHaveBeenCalledWith(error);
   });
 
-  it('should call CartStore\'s addProductToCart method when CartService\'s addToCart is invoked', () => {
+  it("should call CartStore's addProductToCart method when CartService's addToCart is invoked", () => {
     const product = mockProducts[0];
     cartService.addToCart(product);
     expect(mockCartStore.addProductToCart).toHaveBeenCalledWith(product);
@@ -97,7 +97,7 @@ describe('Service: Cart', () => {
     expect(mockGlobalErrorHandler.handleError).toHaveBeenCalledWith(error);
   });
 
-  it('should call CartStore\'s removeProductFromCart method when CartService\'s removeFromCart is invoked', () => {
+  it("should call CartStore's removeProductFromCart method when CartService's removeFromCart is invoked", () => {
     const productId = 1;
     cartService.removeFromCart(productId);
     expect(mockCartStore.removeProductFromCart).toHaveBeenCalledWith(productId);
@@ -112,10 +112,12 @@ describe('Service: Cart', () => {
     expect(mockGlobalErrorHandler.handleError).toHaveBeenCalledWith(error);
   });
 
-  it('should call CartStore\'s decrementProductQuantity method when CartService\'s decrementProductQuantity is invoked', () => {
+  it("should call CartStore's decrementProductQuantity method when CartService's decrementProductQuantity is invoked", () => {
     const productId = 1;
     cartService.decrementProductQuantity(productId);
-    expect(mockCartStore.decrementProductQuantity).toHaveBeenCalledWith(productId);
+    expect(mockCartStore.decrementProductQuantity).toHaveBeenCalledWith(
+      productId,
+    );
     expect(mockGlobalErrorHandler.handleError).not.toHaveBeenCalled();
   });
 
@@ -126,5 +128,4 @@ describe('Service: Cart', () => {
     cartService.decrementProductQuantity(productId);
     expect(mockGlobalErrorHandler.handleError).toHaveBeenCalledWith(error);
   });
-
 });

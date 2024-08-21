@@ -8,41 +8,39 @@ import { CartService } from '@shared/services/cart/cart.service';
 import { OrdersService } from 'app/features/orders/services/orders.service';
 
 @Injectable({ providedIn: 'root' })
-
 export class CheckoutService implements OnInit {
-  private readonly _navigationSvc = inject(NavigationService)
-  private readonly _ordersSvc = inject(OrdersService)
-  private readonly _cartSvc = inject(CartService)
+  private readonly _navigationSvc = inject(NavigationService);
+  private readonly _ordersSvc = inject(OrdersService);
+  private readonly _cartSvc = inject(CartService);
   private readonly route = inject(ActivatedRoute);
   order: IOrder | null = null;
 
-
   ngOnInit(): void {
-    this.initializeOrderFromRoute()
+    this.initializeOrderFromRoute();
   }
 
   private initializeOrderFromRoute() {
-    this.order = this.route.snapshot.data['order']
+    this.order = this.route.snapshot.data['order'];
   }
 
   getOrder() {
-    return this.order
+    return this.order;
   }
 
   updateOrder(orderId: string, state?: string) {
-    const order = this._ordersSvc.getOrderById(orderId)
+    const order = this._ordersSvc.getOrderById(orderId);
     if (order) {
-      this._ordersSvc.updateOrderById(order, state)
+      this._ordersSvc.updateOrderById(order, state);
     }
   }
 
   populateCartFromOrder(id: string): void {
-    const order = this._ordersSvc.getOrderById(id)
+    const order = this._ordersSvc.getOrderById(id);
     if (order) {
-      this._cartSvc.clearCart(false)
+      this._cartSvc.clearCart(false);
       order.items.forEach((item: IProduct) => {
-        this._cartSvc.addToCart(item)
-      })
+        this._cartSvc.addToCart(item);
+      });
     }
   }
 
@@ -51,65 +49,64 @@ export class CheckoutService implements OnInit {
   }
 
   saveOrderAsPending() {
-    const orderId = this.retrieveCurrentOrderId()
+    const orderId = this.retrieveCurrentOrderId();
     if (orderId) {
-      this.updateOrder(orderId)
-      this.resetCurrentOrderId()
+      this.updateOrder(orderId);
+      this.resetCurrentOrderId();
     } else {
-      this._ordersSvc.saveOrderAsPending()
-      this._navigationSvc.navigateToOrders()
-      this.resetCurrentOrderId()
+      this._ordersSvc.saveOrderAsPending();
+      this._navigationSvc.navigateToOrders();
+      this.resetCurrentOrderId();
     }
-    this.clearCartContents(false)
+    this.clearCartContents(false);
   }
 
   finalizeOrder() {
-    const orderId = this.retrieveCurrentOrderId()
+    const orderId = this.retrieveCurrentOrderId();
     if (orderId) {
-      const state = Status.CLOSED
-      this.updateOrder(orderId, state)
-      this.resetCurrentOrderId()
+      const state = Status.CLOSED;
+      this.updateOrder(orderId, state);
+      this.resetCurrentOrderId();
     } else {
       this.completeOrderProcessing();
-      this.resetCurrentOrderId()
+      this.resetCurrentOrderId();
     }
-    this.clearCartContents(false)
+    this.clearCartContents(false);
   }
 
   navigateToHomePage() {
-    this._navigationSvc.navigateHome()
+    this._navigationSvc.navigateHome();
   }
 
   completeOrderProcessing(): any {
-    this._ordersSvc.closeOrder()
+    this._ordersSvc.closeOrder();
   }
 
   removeProductFromCart(id: number) {
-    this._cartSvc.removeFromCart(id)
+    this._cartSvc.removeFromCart(id);
   }
 
   decrementProductQuantity(id: number): void {
-    this._cartSvc.decrementProductQuantity(id)
+    this._cartSvc.decrementProductQuantity(id);
   }
 
   removeOrderIfCartIsEmpty(id: string) {
-    const updatedOrder = this._ordersSvc.getOrderById(id)
+    const updatedOrder = this._ordersSvc.getOrderById(id);
     if (updatedOrder) {
-      this._ordersSvc.updateOrderById(updatedOrder)
+      this._ordersSvc.updateOrderById(updatedOrder);
     }
   }
 
-
   deleteOrderById(id: string) {
-    this._ordersSvc.deleteOrderById(id)
+    this._ordersSvc.deleteOrderById(id);
   }
 
   retrieveCurrentOrderId(): string | undefined {
-    return this._ordersSvc.retrieveOrderId()
+    return this._ordersSvc.retrieveOrderId();
   }
 
   resetCurrentOrderId() {
-    this._ordersSvc.resetOrderId()
+    this._ordersSvc.resetOrderId();
   }
 
   handleClearAllFromCart() {

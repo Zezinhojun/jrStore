@@ -19,11 +19,12 @@ describe('Service: Order', () => {
     mockGlobalErrorHandler = new MockGlobalErrorHandler();
     mockToastrService = new MockToastrService();
     TestBed.configureTestingModule({
-      providers: [OrderService,
+      providers: [
+        OrderService,
         { provide: OrderStore, useValue: mockOrderStore },
         { provide: ToastrService, useValue: mockToastrService },
         { provide: MockGlobalErrorHandler, useValue: mockGlobalErrorHandler },
-      ]
+      ],
     });
     orderService = TestBed.inject(OrderService);
   });
@@ -35,7 +36,11 @@ describe('Service: Order', () => {
     const state = 'OPEN';
     orderService.addOrder(mockProducts, state);
     expect(mockOrderStore.addOrder).toHaveBeenCalled();
-    expect(mockOrderStore.addOrder).toHaveBeenCalledWith(mockProducts, state, undefined);
+    expect(mockOrderStore.addOrder).toHaveBeenCalledWith(
+      mockProducts,
+      state,
+      undefined,
+    );
     expect(mockGlobalErrorHandler.handleError).not.toHaveBeenCalled();
   });
 
@@ -68,5 +73,4 @@ describe('Service: Order', () => {
     expect(result).toBe(mockOrder);
     expect(mockGlobalErrorHandler.handleError).not.toHaveBeenCalled();
   });
-
 });
