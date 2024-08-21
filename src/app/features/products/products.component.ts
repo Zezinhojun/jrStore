@@ -21,11 +21,11 @@ import { CardComponent } from './card/card.component';
     </button>
   </div>
   <div class="hidden lg:flex lg:justify-center lg:items-center lg:w-1/2">
-    <img src="./../../../assets/img/rainJacke (1).png" alt=""
+    <img src="./../../../assets/img/rainJacke.png" alt=""
       class="w-40 h-40 sm:w-60 sm:h-60 md:w-80 md:h-80 object-contain" />
   </div>
   <div class="lg:hidden flex flex-col items-center gap-4">
-    <img src="./../../../assets/img/rainJacke (1).png" alt=""
+    <img src="./../../../assets/img/rainJacke.png" alt=""
       class="w-40 h-40 sm:w-60 sm:h-60 md:w-80 md:h-80 object-contain" />
     <button
       class="w-40 px-4 py-3 rounded-2xl bg-green-800 text-white hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-opacity-50">

@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
 import { CheckoutService } from './services/checkout.service';
+import { IProduct } from '@shared/models/products-interface';
 
 @Component({
   selector: 'app-checkout',
@@ -40,5 +41,7 @@ export default class CheckoutComponent {
   removeOneItem(id: number): void {
     this._checkoutSvc.decrementProductQuantity(id)
   }
-
+  addToCart(product: IProduct): void {
+    this._checkoutSvc.addToCart(product)
+  }
 }

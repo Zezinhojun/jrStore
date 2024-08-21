@@ -120,6 +120,11 @@ export class CheckoutService implements OnInit {
     this.resetCurrentOrderId();
   }
 
+  addToCart(product: IProduct): void {
+    const productWithQty = { ...product, qty: 1 };
+    this._cartSvc.addToCart(productWithQty);
+  }
+
   getCartProducts() {
     return this._cartSvc.products();
   }
