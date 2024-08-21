@@ -8,7 +8,6 @@ import GlobalErrorHandler from '@shared/services/globalErrorHandling/globalError
 import { SpinnerInterceptor } from '@shared/interceptors/spinner.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-
 @Component({
   selector: 'app-root',
   standalone: true,

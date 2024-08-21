@@ -48,7 +48,6 @@ export class CardComponent {
   @Output() addToCartEvent = new EventEmitter<IProduct>();
   @Input() product!: IProduct;
 
-
   onAddToCart(product: IProduct): void {
     this.addToCartEvent.emit(product);
   }
