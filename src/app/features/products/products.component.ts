@@ -4,6 +4,7 @@ import { IProduct } from '@shared/models/products-interface';
 import { CartService } from '@shared/services/cart/cart.service';
 
 import { CardComponent } from './card/card.component';
+import { NavigationService } from '@shared/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-products',
@@ -15,7 +16,7 @@ import { CardComponent } from './card/card.component';
   class="flex flex-col items-center lg:flex-row justify-between container mx-auto bg-opacity-70 bg-gray-200 p-12 mt-4">
   <div class="flex flex-col justify-start gap-20 mt-16 lg:mt-0 lg:w-1/2 hidden md:block">
     <h1 class="text-5xl text-gray-600 w-full lg:w-9/12 mb-10 ">Grab upto 50% off on select Rain Jacket</h1>
-    <button
+    <button (click)="buyNow()"
       class="w-40 px-4 py-3 rounded-2xl bg-green-800 text-white hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-opacity-50">
       Buy now
     </button>
@@ -27,7 +28,7 @@ import { CardComponent } from './card/card.component';
   <div class="lg:hidden flex flex-col items-center gap-4">
     <img src="./../../../assets/img/rainJacke.png" alt=""
       class="w-40 h-40 sm:w-60 sm:h-60 md:w-80 md:h-80 object-contain" />
-    <button
+    <button (click)="buyNow()"
       class="w-40 px-4 py-3 rounded-2xl bg-green-800 text-white hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-opacity-50">
       Buy now
     </button>
@@ -109,10 +110,12 @@ import { CardComponent } from './card/card.component';
 })
 export default class ProductsComponent {
   private readonly _productSvc = inject(ProductsService)
-  private readonly _cartService = inject(CartService);
+  private readonly _cartSvc = inject(CartService);
+  private readonly _navigationSvc = inject(NavigationService)
   public products = this._productSvc.products
   public isDropdownOpen = signal<boolean>(false);
   public selectedSortOrder: 'asc' | 'desc' = 'desc';
+  private product!: IProduct
 
   toggleDropdown() {
     this.isDropdownOpen.set(!this.isDropdownOpen())
@@ -125,6 +128,17 @@ export default class ProductsComponent {
   }
 
   onAddToCart(product: IProduct): void {
-    this._cartService.addToCart(product)
+    console.log(product)
+    this._cartSvc.addToCart(product)
   }
+
+  buyNow() {
+    const product = this._productSvc.getProductById(17);
+    if (product) {
+      const productWithQty = { ...product, qty: 1 };
+      this._cartSvc.addToCart(productWithQty);
+      this._navigationSvc.navigateToCheckoutWithoutId();
+    }
+  }
+
 }

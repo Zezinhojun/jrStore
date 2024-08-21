@@ -18,9 +18,17 @@ export class NavigationService {
     }
   }
 
-  async navigateToCheckout(id: string) {
+  async navigateToCheckout(id?: string) {
     try {
       await this.router.navigate(['/checkout', id]);
+    } catch (error) {
+      this._globalErrorHandlerSvc.handleError(error)
+    }
+  }
+
+  async navigateToCheckoutWithoutId() {
+    try {
+      await this.router.navigate(['/checkout']);
     } catch (error) {
       this._globalErrorHandlerSvc.handleError(error)
     }
